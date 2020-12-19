@@ -9,7 +9,12 @@
   </header>
   <div class="content-container">
     <div class="content-area">
-      ...
+      <app-cytoscape-graph
+        #graph
+        [nodes]="nodes"
+        [edges]="edges"
+        [layoutOptions]="layoutOptions"
+      ></app-cytoscape-graph>
     </div>
   </div>
 </div>

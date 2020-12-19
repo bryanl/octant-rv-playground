@@ -8,13 +8,21 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "typeRoots": ["node_modules/@types"],
     "target": "es2015",
     "module": "es2020",
     "lib": [
       "es2018",
       "dom"
     ]
+  },
+  "files": [],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
   }
 }
