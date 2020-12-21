@@ -1,6 +1,12 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { CytoscapeGraphComponent } from './modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
-import { EdgeDefinition, LayoutOptions, NodeDefinition } from 'cytoscape';
+import {
+  EdgeDefinition,
+  LayoutOptions,
+  NodeDefinition,
+  Stylesheet,
+} from 'cytoscape';
+import { DataService } from './services/data/data.service';
 
 @Component({
   selector: 'app-root',
@@ -13,28 +19,19 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   title = 'rv-playground';
 
-  nodes: NodeDefinition[] = [
-    {
-      data: { id: 'one' },
-    },
-    {
-      data: { id: 'two' },
-    },
-  ];
-  edges: EdgeDefinition[] = [
-    {
-      data: {
-        id: 'edge',
-        source: 'one',
-        target: 'two',
-      },
-    },
-  ];
-  layoutOptions: LayoutOptions = {
-    name: 'circle',
-  };
+  nodes: NodeDefinition[];
+  edges: EdgeDefinition[];
+  layoutOptions: LayoutOptions;
+  style: Stylesheet[];
 
-  ngOnInit(): void {}
+  constructor(private dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.nodes = this.dataService.nodes();
+    this.edges = this.dataService.edges();
+    this.layoutOptions = this.dataService.layoutOptions();
+    this.style = this.dataService.style();
+  }
 
   ngAfterViewInit(): void {
     this.graph.render();

@@ -9,6 +9,13 @@ import cytoscape, {
   SelectionType,
   Stylesheet,
 } from 'cytoscape';
+import dagre from 'cytoscape-dagre';
+import coseBilkent from 'cytoscape-cose-bilkent';
+import cola from 'cytoscape-cola';
+
+cy.use(dagre);
+cy.use(coseBilkent);
+cy.use(cola);
 
 @Component({
   selector: 'app-cytoscape-graph',
@@ -32,19 +39,13 @@ export class CytoscapeGraphComponent implements OnInit {
   selectionType: SelectionType;
 
   @Input()
-  style: Stylesheet[] = [
-    {
-      selector: 'node',
-      style: {
-        label: 'data(id)',
-      },
-    },
-  ];
+  style: Stylesheet[];
 
   @Input()
-  layoutOptions: LayoutOptions = {
-    name: 'grid',
-  };
+  layoutOptions: LayoutOptions;
+
+  @Input()
+  zoom = 1;
 
   private cy: cy.Core;
 
@@ -79,6 +80,9 @@ export class CytoscapeGraphComponent implements OnInit {
       pan: this.pan,
       selectionType: this.selectionType,
       style: this.style,
+      zoom: this.zoom,
+      minZoom: -10,
+      maxZoom: 10,
     };
 
     this.cy = cytoscape(cyOptions);
