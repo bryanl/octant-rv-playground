@@ -53,6 +53,13 @@ const nodes: NodeDefinition[] = [
     },
     classes: 'secret',
   },
+  {
+    data: {
+      id: 'v1 Service service',
+      label: 'service',
+    },
+    classes: 'service',
+  },
 ];
 
 @Injectable({
@@ -78,6 +85,20 @@ export class DataService {
           target: 'v1 Secret default-token-1',
         },
         selectable: false,
+      },
+      {
+        data: {
+          id: 'service-1',
+          target: 'apps/v1 ReplicaSet nginx-1',
+          source: 'v1 Service service',
+        },
+      },
+      {
+        data: {
+          id: 'service-2',
+          target: 'apps/v1 ReplicaSet nginx-2',
+          source: 'v1 Service service',
+        },
       },
     ];
   }
@@ -165,7 +186,8 @@ export class DataService {
       {
         selector: 'edge',
         css: {
-          'curve-style': 'bezier',
+          'curve-style': 'taxi',
+          'edge-distances': 'node-position',
           'target-arrow-shape': 'triangle',
           width: 1,
         },
