@@ -21,6 +21,8 @@ const nodes: NodeDefinition[] = [
       id: 'apps/v1 ReplicaSet nginx-1',
       label: '77bd6fc7d8',
       parent: 'apps/v1 Deployment nginx',
+
+      podsOk: 10,
     },
     classes: 'apps-ReplicaSet',
   },
@@ -29,6 +31,11 @@ const nodes: NodeDefinition[] = [
       id: 'apps/v1 ReplicaSet nginx-2',
       label: '9d6658964',
       parent: 'apps/v1 Deployment nginx',
+
+      podsOk: 3,
+      podsWarning: 8,
+      podsError: 2,
+      status: 'error',
     },
     classes: 'apps-ReplicaSet',
   },
@@ -82,7 +89,6 @@ export class DataService {
   layoutOptions(): LayoutOptions {
     return {
       name: 'cola',
-      // @ts-ignore
       animate: false,
       fit: true,
       padding: 150,
@@ -97,6 +103,18 @@ export class DataService {
   }
 
   style(): Stylesheet[] {
+    const podPercentage = (key: string): ((NodeSingular) => string) => {
+      return (ele: NodeSingular): string => {
+        const total = ['podsOk', 'podsWarning', 'podsError'].reduce<number>(
+          (p, c) => (ele.data(c) ? parseInt(ele.data(c), 10) + p : p),
+          0
+        );
+
+        const x = (ele.data(key) / total) * 100;
+        return isNaN(x) ? '0' : `${x}%`;
+      };
+    };
+
     return [
       {
         selector: 'node',
@@ -107,8 +125,21 @@ export class DataService {
       },
       {
         selector: '$node > node',
-        style: {
+        css: {
           padding: '40px',
+        },
+      },
+      {
+        selector: '.apps-ReplicaSet',
+        css: {
+          shape: 'ellipse',
+          'pie-size': '100%',
+          'pie-1-background-color': 'hsl(93, 79%, 40%)',
+          'pie-1-background-size': podPercentage('podsOk'),
+          'pie-2-background-color': 'hsl(48, 94%, 57%)',
+          'pie-2-background-size': podPercentage('podsWarning'),
+          'pie-3-background-color': 'hsl(9, 100%, 43%)',
+          'pie-3-background-size': podPercentage('podsError'),
         },
       },
       {
@@ -150,7 +181,7 @@ export class DataService {
         tpl: data =>
           `
 <div style="${styleToString(replicasetStyle)}">
-    <clr-icon size="12" shape="check-circle" class="is-success is-solid"></clr-icon>
+     ${nodeStatus(data)}
     <span>${data.label}</span>
 </div>`,
       },
@@ -160,7 +191,7 @@ export class DataService {
         tpl: data =>
           `
 <div style="${styleToString(deploymentStyle)}">
-    <clr-icon size="12" shape="check-circle" class="is-success is-solid"></clr-icon>
+     ${nodeStatus(data)}
     <span>Deployment ${data.label}</span>
 </div>`,
       },
@@ -176,6 +207,11 @@ const styleToString = (obj: Style): string =>
   Object.entries(obj).reduce((prev, [key, val]) => {
     return `${prev} ${key}: ${val};`;
   }, '');
+
+const nodeStatus = (data): string => {
+  const status = data.status || 'success';
+  return `<clr-icon size="12" shape="check-circle" class="is-${status} is-solid"></clr-icon>`;
+};
 
 const defaultLabelPosition: CytoscapeNodeHtmlParams = {
   halign: 'center', // title vertical position. Can be 'left',''center, 'right'
