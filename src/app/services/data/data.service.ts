@@ -119,19 +119,32 @@ export class DataService {
       {
         selector: 'node',
         css: {
+          'background-color': 'hsl(198, 0%, 91%)',
+          'border-color': 'hsl(198, 66%, 57%)',
+          'border-width': 1,
           shape: 'round-rectangle',
           'z-index': 100,
         },
       },
       {
+        selector: 'node:selected',
+        css: {
+          'background-color': 'hsl(198, 81%, 88%)',
+          'border-width': 2,
+        },
+      },
+      {
         selector: '$node > node',
         css: {
+          'border-color': 'gray',
           padding: '40px',
         },
       },
       {
         selector: '.apps-ReplicaSet',
         css: {
+          'border-width': 1,
+          'border-color': 'gray',
           shape: 'ellipse',
           'pie-size': '100%',
           'pie-1-background-color': 'hsl(93, 79%, 40%)',
@@ -143,10 +156,18 @@ export class DataService {
         },
       },
       {
+        selector: '.apps-ReplicaSet:selected',
+        css: {
+          'border-width': 2,
+          'border-color': 'hsl(198, 66%, 57%)',
+        },
+      },
+      {
         selector: 'edge',
         css: {
           'curve-style': 'bezier',
           'target-arrow-shape': 'triangle',
+          width: 1,
         },
       },
     ];
