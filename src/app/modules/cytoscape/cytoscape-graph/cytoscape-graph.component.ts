@@ -12,10 +12,13 @@ import cytoscape, {
 import dagre from 'cytoscape-dagre';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import cola from 'cytoscape-cola';
+import { CytoscapeNodeHtmlParams } from './node-html-label';
+const nodeHtmlLabel = require('cytoscape-node-html-label');
 
 cy.use(dagre);
 cy.use(coseBilkent);
 cy.use(cola);
+nodeHtmlLabel(cy);
 
 @Component({
   selector: 'app-cytoscape-graph',
@@ -43,6 +46,9 @@ export class CytoscapeGraphComponent implements OnInit {
 
   @Input()
   layoutOptions: LayoutOptions;
+
+  @Input()
+  nodeHtmlParams: CytoscapeNodeHtmlParams[];
 
   @Input()
   zoom = 1;
@@ -86,6 +92,11 @@ export class CytoscapeGraphComponent implements OnInit {
     };
 
     this.cy = cytoscape(cyOptions);
+
+    if (this.nodeHtmlParams) {
+      (this.cy as any).nodeHtmlLabel(this.nodeHtmlParams);
+    }
+
     this.cy.startBatch();
     this.cy.nodes().remove();
     this.cy.edges().remove();

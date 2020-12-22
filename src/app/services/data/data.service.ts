@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import {
   EdgeDefinition,
   LayoutOptions,
-  NodeDataDefinition,
   NodeDefinition,
   NodeSingular,
   Stylesheet,
 } from 'cytoscape';
+import { CytoscapeNodeHtmlParams } from '../../modules/cytoscape/cytoscape-graph/node-html-label';
 
 const nodes: NodeDefinition[] = [
   {
@@ -77,15 +77,16 @@ export class DataService {
     return nodes;
   }
 
-  layoutOptions(): any {
-    const self = this;
+  layoutOptions(): LayoutOptions {
     return {
       name: 'cola',
+      // @ts-ignore
       animate: false,
-      nodeDimensionsIncludeLabels: true,
+      fit: true,
+      padding: 150,
       nodeSpacing: (node: NodeSingular): number => {
         if (node.data('parent') === undefined) {
-          return 50;
+          return 70;
         }
         return 10;
       },
@@ -98,11 +99,17 @@ export class DataService {
     return [
       {
         selector: 'node',
-        style: {
-          label: 'data(label)',
+        css: {
           shape: 'round-rectangle',
-          'text-valign': 'bottom',
           'z-index': 100,
+        },
+      },
+      {
+        selector: '$node > node',
+        style: {
+          'min-height': '100%',
+          'min-width': '100%',
+          'min-height-bias-bottom': '50%',
         },
       },
       {
@@ -117,4 +124,44 @@ export class DataService {
       },
     ];
   }
+
+  nodeHtmlParams(): CytoscapeNodeHtmlParams[] {
+    const style = {
+      'background-color': 'hsl(198, 0%, 0%)',
+      'border-radius': '4px',
+      color: '#fff',
+      'font-size': '14px',
+      'margin-top': '18px',
+      padding: '0 7px 3px',
+      opacity: '0.85',
+    };
+
+    console.log('f', styleToString(style));
+
+    return [
+      {
+        query: 'node',
+        tpl: data => '<div>' + data.label + '</div>',
+        ...defaultLabelPosition,
+      },
+      {
+        query: '$node > node',
+        tpl: data => `<div style="${styleToString(style)}">${data.label}</div>`,
+        ...defaultLabelPosition,
+      },
+    ];
+  }
 }
+
+const styleToString = (obj: { [key: string]: any }): string =>
+  Object.entries(obj).reduce((prev, [key, val]) => {
+    return `${prev} ${key}: ${val};`;
+  }, '');
+
+const defaultLabelPosition: CytoscapeNodeHtmlParams = {
+  halign: 'center', // title vertical position. Can be 'left',''center, 'right'
+  valign: 'bottom', // title vertical position. Can be 'top',''center, 'bottom'
+  halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
+  valignBox: 'bottom', // title relative box vertical position. Can be 'top',''center, 'bottom'
+  cssClass: '', // any classes will be as attribute of <div> container for every title
+};

@@ -7,6 +7,7 @@ import {
   Stylesheet,
 } from 'cytoscape';
 import { DataService } from './services/data/data.service';
+import { CytoscapeNodeHtmlParams } from './modules/cytoscape/cytoscape-graph/node-html-label';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   edges: EdgeDefinition[];
   layoutOptions: LayoutOptions;
   style: Stylesheet[];
+  nodeHtmlParams: CytoscapeNodeHtmlParams[];
 
   constructor(private dataService: DataService) {}
 
@@ -31,6 +33,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.edges = this.dataService.edges();
     this.layoutOptions = this.dataService.layoutOptions();
     this.style = this.dataService.style();
+    this.nodeHtmlParams = this.dataService.nodeHtmlParams();
   }
 
   ngAfterViewInit(): void {

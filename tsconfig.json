@@ -12,7 +12,10 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types",
+      "src/@types"
+    ],
     "target": "es2015",
     "module": "es2020",
     "lib": [
