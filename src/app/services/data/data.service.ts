@@ -109,17 +109,22 @@ export class DataService {
 
   layoutOptions(): LayoutOptions {
     return {
-      name: 'cola',
+      name: 'cose-bilkent',
+      padding: 120,
       animate: false,
-      fit: true,
-      padding: 150,
-      nodeSpacing: (node: NodeSingular): number => {
-        if (node.data('parent') === undefined) {
-          return 70;
-        }
-        return 40;
-      },
-      nodeSep: 20,
+      idealEdgeLength: 150,
+
+      // name: 'cola',
+      // animate: false,
+      // fit: true,
+      // padding: 150,
+      // nodeSpacing: (node: NodeSingular): number => {
+      //   if (node.data('parent') === undefined) {
+      //     return 70;
+      //   }
+      //   return 40;
+      // },
+      // nodeSep: 20,
     };
   }
 
@@ -186,8 +191,7 @@ export class DataService {
       {
         selector: 'edge',
         css: {
-          'curve-style': 'taxi',
-          'edge-distances': 'node-position',
+          'curve-style': 'bezier',
           'target-arrow-shape': 'triangle',
           width: 1,
         },
