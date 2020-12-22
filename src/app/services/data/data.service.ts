@@ -22,7 +22,7 @@ const nodes: NodeDefinition[] = [
       label: '77bd6fc7d8',
       parent: 'apps/v1 Deployment nginx',
     },
-    classes: 'apps-replicaset',
+    classes: 'apps-ReplicaSet',
   },
   {
     data: {
@@ -30,7 +30,7 @@ const nodes: NodeDefinition[] = [
       label: '9d6658964',
       parent: 'apps/v1 Deployment nginx',
     },
-    classes: 'apps-replicaset',
+    classes: 'apps-ReplicaSet',
   },
   {
     data: {
@@ -90,8 +90,9 @@ export class DataService {
         if (node.data('parent') === undefined) {
           return 70;
         }
-        return 10;
+        return 40;
       },
+      nodeSep: 20,
 
       // name: 'cose-bilkent',
     };
@@ -109,49 +110,62 @@ export class DataService {
       {
         selector: '$node > node',
         style: {
-          'min-height': '100%',
-          'min-width': '100%',
-          'min-height-bias-bottom': '50%',
+          padding: '40px',
         },
       },
       {
         selector: 'edge',
         css: {
-          'curve-style': 'taxi',
+          'curve-style': 'bezier',
           'target-arrow-shape': 'triangle',
-          'source-endpoint': 'inside-to-node',
+          // 'source-endpoint': 'inside-to-node',
         },
       },
     ];
   }
 
   nodeHtmlParams(): CytoscapeNodeHtmlParams[] {
-    const style = {
+    const deploymentStyle = {
       'background-color': 'hsl(198, 0%, 0%)',
       'border-radius': '4px',
       color: '#fff',
       'font-family': 'var(--clr-font)',
       'font-size': '14px',
-      'margin-top': '18px',
+      'margin-top': '50px',
       padding: '0 7px 3px',
+      opacity: '0.85',
+    };
+
+    const replicasetStyle = {
+      'background-color': 'hsl(198, 0%, 98%)',
+      'border-radius': '4px',
+      'box-shadow': '2px 2px 4px #ccc',
+      'font-size': '12px',
+      'margin-top': '4px',
+      padding: '0 5px',
       opacity: '0.85',
     };
 
     return [
       {
-        query: 'node',
-        tpl: data => '<div>' + data.label + '</div>',
         ...defaultLabelPosition,
+        query: 'node',
+        tpl: data =>
+          `
+<div style="${styleToString(replicasetStyle)}">
+    <clr-icon size="12" shape="check-circle" class="is-success is-solid"></clr-icon>
+    <span>${data.label}</span>
+</div>`,
       },
       {
+        ...defaultLabelPosition,
         query: '.apps-Deployment',
         tpl: data =>
           `
-<div style="${styleToString(style)}">
+<div style="${styleToString(deploymentStyle)}">
     <clr-icon size="12" shape="check-circle" class="is-success is-solid"></clr-icon>
     <span>Deployment ${data.label}</span>
 </div>`,
-        ...defaultLabelPosition,
       },
     ];
   }
