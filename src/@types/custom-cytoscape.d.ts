@@ -6,6 +6,7 @@ declare module 'cytoscape' {
       'min-height'?: PropertyValueNode<number | string>;
       'min-width'?: PropertyValueNode<number | string>;
       'min-height-bias-bottom'?: PropertyValueNode<number | string>;
+      padding?: PropertyValueNode<number | string>;
     }
   }
 }

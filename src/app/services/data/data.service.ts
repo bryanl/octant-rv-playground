@@ -93,8 +93,6 @@ export class DataService {
         return 40;
       },
       nodeSep: 20,
-
-      // name: 'cose-bilkent',
     };
   }
 
@@ -118,7 +116,6 @@ export class DataService {
         css: {
           'curve-style': 'bezier',
           'target-arrow-shape': 'triangle',
-          // 'source-endpoint': 'inside-to-node',
         },
       },
     ];
