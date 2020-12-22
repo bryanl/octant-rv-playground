@@ -14,23 +14,23 @@ const nodes: NodeDefinition[] = [
       id: 'apps/v1 Deployment nginx',
       label: 'nginx',
     },
-    classes: 'compound',
+    classes: 'apps-Deployment',
   },
   {
     data: {
       id: 'apps/v1 ReplicaSet nginx-1',
-      label: '1',
+      label: '77bd6fc7d8',
       parent: 'apps/v1 Deployment nginx',
     },
-    classes: 'replicaset',
+    classes: 'apps-replicaset',
   },
   {
     data: {
       id: 'apps/v1 ReplicaSet nginx-2',
-      label: '2',
+      label: '9d6658964',
       parent: 'apps/v1 Deployment nginx',
     },
-    classes: 'replicaset',
+    classes: 'apps-replicaset',
   },
   {
     data: {
@@ -62,6 +62,7 @@ export class DataService {
           source: 'apps/v1 Deployment nginx',
           target: 'v1 ServiceAccount default',
         },
+        selectable: false,
       },
       {
         data: {
@@ -69,6 +70,7 @@ export class DataService {
           source: 'apps/v1 Deployment nginx',
           target: 'v1 Secret default-token-1',
         },
+        selectable: false,
       },
     ];
   }
@@ -118,8 +120,6 @@ export class DataService {
           'curve-style': 'taxi',
           'target-arrow-shape': 'triangle',
           'source-endpoint': 'inside-to-node',
-          // @ts-ignore
-          'z-compound-depth': 'bottom',
         },
       },
     ];
@@ -130,13 +130,12 @@ export class DataService {
       'background-color': 'hsl(198, 0%, 0%)',
       'border-radius': '4px',
       color: '#fff',
+      'font-family': 'var(--clr-font)',
       'font-size': '14px',
       'margin-top': '18px',
       padding: '0 7px 3px',
       opacity: '0.85',
     };
-
-    console.log('f', styleToString(style));
 
     return [
       {
@@ -145,15 +144,24 @@ export class DataService {
         ...defaultLabelPosition,
       },
       {
-        query: '$node > node',
-        tpl: data => `<div style="${styleToString(style)}">${data.label}</div>`,
+        query: '.apps-Deployment',
+        tpl: data =>
+          `
+<div style="${styleToString(style)}">
+    <clr-icon size="12" shape="check-circle" class="is-success is-solid"></clr-icon>
+    <span>Deployment ${data.label}</span>
+</div>`,
         ...defaultLabelPosition,
       },
     ];
   }
 }
 
-const styleToString = (obj: { [key: string]: any }): string =>
+interface Style {
+  [key: string]: string;
+}
+
+const styleToString = (obj: Style): string =>
   Object.entries(obj).reduce((prev, [key, val]) => {
     return `${prev} ${key}: ${val};`;
   }, '');
