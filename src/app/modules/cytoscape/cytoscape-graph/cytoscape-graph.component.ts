@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import * as cy from 'cytoscape';
 import cytoscape, {
   CytoscapeOptions,
@@ -19,6 +27,10 @@ cy.use(dagre);
 cy.use(coseBilkent);
 cy.use(cola);
 nodeHtmlLabel(cy);
+
+export interface GraphState {
+  zoom?: number;
+}
 
 @Component({
   selector: 'app-cytoscape-graph',
@@ -52,6 +64,9 @@ export class CytoscapeGraphComponent implements OnInit {
 
   @Input()
   zoom = 1;
+
+  @Output()
+  state: EventEmitter<GraphState> = new EventEmitter<GraphState>();
 
   private cy: cy.Core;
 
@@ -110,5 +125,16 @@ export class CytoscapeGraphComponent implements OnInit {
     if (this.layoutOptions) {
       this.cy.layout(this.layoutOptions).run();
     }
+
+    this.cy.on('zoom', this.emitState.bind(this));
+
+    this.emitState(null);
+  }
+
+  emitState(_): void {
+    const state: GraphState = {
+      zoom: this.cy.zoom(),
+    };
+    this.state.emit(state);
   }
 }

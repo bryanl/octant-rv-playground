@@ -1,5 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { CytoscapeGraphComponent } from './modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
+import {
+  CytoscapeGraphComponent,
+  GraphState,
+} from './modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
 import {
   EdgeDefinition,
   LayoutOptions,
@@ -26,6 +29,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   style: Stylesheet[];
   nodeHtmlParams: CytoscapeNodeHtmlParams[];
 
+  state: GraphState = {};
+
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
@@ -38,5 +43,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.graph.render();
+  }
+
+  handleGraphState(state: GraphState): void {
+    this.state = state;
   }
 }

@@ -17,9 +17,10 @@
           [layoutOptions]="layoutOptions"
           [style]="style"
           [nodeHtmlParams]="nodeHtmlParams"
+          (state)="handleGraphState($event)"
         ></app-cytoscape-graph>
         <app-sliding-sidebar></app-sliding-sidebar>
-        <app-graph-controls [zoom]="83"></app-graph-controls>
+        <app-graph-controls [zoom]="state.zoom"></app-graph-controls>
       </div>
     </div>
   </div>
