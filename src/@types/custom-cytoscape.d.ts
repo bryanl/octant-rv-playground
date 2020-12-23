@@ -8,7 +8,7 @@ declare module 'cytoscape' {
     padding?: number;
     nodeSpacing?: (node: NodeSingular) => number;
     nodeSep?: number;
-    idealEdgeLength?: number;
+    idealEdgeLength?: number | ((edge: any) => number);
   }
 
   namespace Css {

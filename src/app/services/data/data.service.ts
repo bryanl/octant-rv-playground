@@ -13,6 +13,11 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'apps/v1 Deployment nginx',
       label: 'nginx',
+      description: 'apps/v1 Deployment',
+      width: 18 * 10,
+
+      apiVersion: 'apps/v1',
+      kind: 'Deployment',
     },
     classes: 'apps-Deployment',
   },
@@ -20,9 +25,14 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'apps/v1 ReplicaSet nginx-1',
       label: '77bd6fc7d8',
+      description: 'apps/v1 ReplicaSet',
+      width: '18 * 10',
       parent: 'apps/v1 Deployment nginx',
 
       podsOk: 10,
+
+      apiVersion: 'apps/v1',
+      kind: 'ReplicaSet',
     },
     classes: 'apps-ReplicaSet',
   },
@@ -30,12 +40,17 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'apps/v1 ReplicaSet nginx-2',
       label: '9d6658964',
+      description: 'apps/v1 ReplicaSet',
+      width: 18 * 10,
       parent: 'apps/v1 Deployment nginx',
 
       podsOk: 3,
       podsWarning: 8,
       podsError: 2,
       status: 'error',
+
+      apiVersion: 'apps/v1',
+      kind: 'ReplicaSet',
     },
     classes: 'apps-ReplicaSet',
   },
@@ -43,6 +58,11 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'v1 ServiceAccount default',
       label: 'default',
+      description: 'v1 ServiceAccount',
+      width: 17 * 8,
+
+      apiVersion: 'v1',
+      kind: 'ServiceAccount',
     },
     classes: 'serviceaccount',
   },
@@ -50,6 +70,11 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'v1 Secret default-token-1',
       label: 'default-token-1',
+      description: 'v1 Secret',
+      width: 9 * 8,
+
+      apiVersion: 'v1',
+      kind: 'Secret',
     },
     classes: 'secret',
   },
@@ -57,6 +82,11 @@ const nodes: NodeDefinition[] = [
     data: {
       id: 'v1 Service service',
       label: 'service',
+      description: 'v1 Service',
+      width: 10 * 6,
+
+      apiVersion: 'v1',
+      kind: 'Service',
     },
     classes: 'service',
   },
@@ -148,8 +178,12 @@ export class DataService {
           'background-color': 'hsl(198, 0%, 91%)',
           'border-color': 'hsl(198, 66%, 57%)',
           'border-width': 1,
+          'font-size': '10px',
+          content: `data(description)`,
+          'text-valign': 'center',
+          'text-wrap': 'wrap',
           shape: 'round-rectangle',
-          'z-index': 100,
+          width: 'data(width)',
         },
       },
       {
@@ -163,6 +197,7 @@ export class DataService {
         selector: '$node > node',
         css: {
           'border-color': 'gray',
+          content: '',
           padding: '40px',
         },
       },
@@ -171,7 +206,10 @@ export class DataService {
         css: {
           'border-width': 1,
           'border-color': 'gray',
+          content: '',
           shape: 'ellipse',
+          width: '60%',
+          height: '60%',
           'pie-size': '100%',
           'pie-1-background-color': 'hsl(93, 79%, 40%)',
           'pie-1-background-size': podPercentage('podsOk'),
