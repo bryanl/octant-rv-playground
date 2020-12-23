@@ -9,14 +9,17 @@
   </header>
   <div class="content-container">
     <div class="content-area">
-      <app-cytoscape-graph
-        #graph
-        [nodes]="nodes"
-        [edges]="edges"
-        [layoutOptions]="layoutOptions"
-        [style]="style"
-        [nodeHtmlParams]="nodeHtmlParams"
-      ></app-cytoscape-graph>
+      <div class="wrapper">
+        <app-cytoscape-graph
+          #graph
+          [nodes]="nodes"
+          [edges]="edges"
+          [layoutOptions]="layoutOptions"
+          [style]="style"
+          [nodeHtmlParams]="nodeHtmlParams"
+        ></app-cytoscape-graph>
+        <app-sliding-sidebar></app-sliding-sidebar>
+      </div>
     </div>
   </div>
 </div>

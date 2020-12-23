@@ -1,0 +1,5 @@
+<div class="sidebar" [ngClass]="{ 'is-closed': isClosed }">
+  <button class="toggle" (click)="toggleClosed()">
+    {{ isClosed | slidingSidebarToggleLabel }}
+  </button>
+</div>

@@ -1,0 +1,32 @@
+$sidebar__width: 20em;
+$toggle__height: 30px;
+$border: 24px;
+
+:host {
+  width: $sidebar__width;
+  position: absolute;
+  top: 0;
+  right: -$border;
+  height: calc(100% + 2 * #{$border});
+  margin: -$border auto 0 auto;
+}
+
+.sidebar {
+  height: 100%;
+  background-color: pink;
+  transition: transform 500ms ease-in-out;
+
+  .toggle {
+    height: $toggle__height;
+    position: absolute;
+    transform-origin: 0 0;
+    transform: rotate(-90deg);
+    top: 8em;
+    left: -$toggle__height;
+    z-index: 1;
+  }
+
+  &.is-closed {
+    transform: translateX($sidebar__width);
+  }
+}
