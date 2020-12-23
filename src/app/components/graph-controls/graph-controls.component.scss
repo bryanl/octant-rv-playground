@@ -1,0 +1,16 @@
+:host {
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  z-index: 100;
+  opacity: 1;
+}
+
+.zoom-level {
+  height: 36px;
+  margin-right: 12px;
+  border: 1px solid hsl(198, 100%, 32%);
+  border-radius: 4px;
+  padding: 8px;
+  font-weight: 700;
+}
