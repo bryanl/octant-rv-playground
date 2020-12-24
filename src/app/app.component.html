@@ -14,13 +14,19 @@
           #graph
           [nodes]="nodes"
           [edges]="edges"
+          [zoom]="zoom"
           [layoutOptions]="layoutOptions"
           [style]="style"
           [nodeHtmlParams]="nodeHtmlParams"
           (state)="handleGraphState($event)"
         ></app-cytoscape-graph>
         <app-sliding-sidebar></app-sliding-sidebar>
-        <app-graph-controls [zoom]="state.zoom"></app-graph-controls>
+        <app-graph-controls
+          [zoom]="state.zoom"
+          (zoomIn)="handleZoomIn()"
+          (zoomOut)="handleZoomOut()"
+          (maximize)="handleMaximize()"
+        ></app-graph-controls>
       </div>
     </div>
   </div>

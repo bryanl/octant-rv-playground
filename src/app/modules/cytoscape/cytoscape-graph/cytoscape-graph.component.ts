@@ -3,8 +3,10 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import * as cy from 'cytoscape';
@@ -37,7 +39,7 @@ export interface GraphState {
   template: ` <div #cyGraph class="graphWrapper"></div> `,
   styleUrls: ['./cytoscape-graph.component.scss'],
 })
-export class CytoscapeGraphComponent implements OnInit {
+export class CytoscapeGraphComponent {
   @ViewChild('cyGraph')
   cyGraph: ElementRef;
 
@@ -71,10 +73,10 @@ export class CytoscapeGraphComponent implements OnInit {
   private cy: cy.Core;
 
   loading = false;
+  private initialZoom: number;
+  private initialPosition: cytoscape.Position;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   render(): void {
     this.runWhileLoading(this.rerender.bind(this));
@@ -126,15 +128,35 @@ export class CytoscapeGraphComponent implements OnInit {
       this.cy.layout(this.layoutOptions).run();
     }
 
+    this.cy.reset();
+    this.cy.center();
+
     this.cy.on('zoom', this.emitState.bind(this));
+    this.initialZoom = this.cy.zoom();
+    this.initialPosition = this.cy.pan();
 
     this.emitState(null);
   }
 
   emitState(_): void {
+    this.zoom = this.cy.zoom();
     const state: GraphState = {
       zoom: this.cy.zoom(),
     };
     this.state.emit(state);
   }
+
+  zoomIn(): void {
+    this.cy.zoom(this.zoom + 0.01);
+  }
+
+  zoomOut(): void {
+    this.cy.zoom(this.zoom - 0.01);
+  }
+
+  maximize(): void {
+    this.cy.fit();
+  }
+
+  private update(): void {}
 }

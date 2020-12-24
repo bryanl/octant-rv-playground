@@ -1,16 +1,16 @@
 <span class="zoom-level">{{ zoom | zoomLevel }}</span>
 
 <clr-button-group class="btn-icon">
-  <clr-button class="btn btn-info">
+  <clr-button class="btn btn-info" (click)="triggerZoomIn()">
     <clr-icon shape="zoom-in"></clr-icon>
   </clr-button>
-  <clr-button class="btn btn-info">
+  <clr-button class="btn btn-info" (click)="triggerZoomOut()">
     <clr-icon shape="zoom-out"></clr-icon>
   </clr-button>
 </clr-button-group>
 
 <clr-button-group class="btn-icon">
-  <clr-button class="btn-info">
+  <clr-button class="btn-info" (click)="triggerMaximize()">
     <clr-icon shape="resize"></clr-icon>
   </clr-button>
 </clr-button-group>

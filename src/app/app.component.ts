@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   style: Stylesheet[];
   nodeHtmlParams: CytoscapeNodeHtmlParams[];
 
+  zoom = 1;
+
   state: GraphState = {};
 
   constructor(private dataService: DataService) {}
@@ -47,5 +49,18 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   handleGraphState(state: GraphState): void {
     this.state = state;
+    this.zoom = state.zoom;
+  }
+
+  handleZoomIn(): void {
+    this.graph.zoomIn();
+  }
+
+  handleZoomOut(): void {
+    this.graph.zoomOut();
+  }
+
+  handleMaximize(): void {
+    this.graph.maximize();
   }
 }

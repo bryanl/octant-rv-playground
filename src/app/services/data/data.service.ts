@@ -140,9 +140,10 @@ export class DataService {
   layoutOptions(): LayoutOptions {
     return {
       name: 'cose-bilkent',
-      padding: 120,
+      padding: 170,
       animate: false,
-      idealEdgeLength: 150,
+      idealEdgeLength: 200,
+      fit: true,
 
       // name: 'cola',
       // animate: false,
