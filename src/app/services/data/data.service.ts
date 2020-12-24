@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EdgeDefinition, NodeDefinition } from 'cytoscape';
+import { GraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
 
 export interface Node {
   id: string;
@@ -68,11 +69,6 @@ const nodes1: Node[] = [
   },
 ];
 
-export interface GraphData {
-  nodes: NodeDefinition[];
-  edges: EdgeDefinition[];
-}
-
 @Injectable({
   providedIn: 'root',
 })
@@ -90,15 +86,10 @@ export class DataService {
   }
 }
 
-export interface BOM {
-  nodes: NodeDefinition[];
-  edges: EdgeDefinition[];
-}
-
 class BOMGenerator {
   constructor(private nodes: Node[]) {}
 
-  generate(): BOM {
+  generate(): GraphData {
     return {
       nodes: this.nodeDefinitions(),
       edges: this.edgeDefinitions(),

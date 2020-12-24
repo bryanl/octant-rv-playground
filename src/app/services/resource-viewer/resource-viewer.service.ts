@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LayoutOptions, NodeSingular, Stylesheet } from 'cytoscape';
+import { GraphConfig } from '../../modules/cytoscape/cytoscape-graph/graph_config';
 import { CytoscapeNodeHtmlParams } from '../../modules/cytoscape/cytoscape-graph/node-html-label';
-
-export interface GraphConfig {
-  layoutOptions: LayoutOptions;
-  style: Stylesheet[];
-  nodeHtmlParams: CytoscapeNodeHtmlParams[];
-}
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +20,7 @@ export class ResourceViewerService {
   private layoutOptions(): LayoutOptions {
     return {
       name: 'cose-bilkent',
-      padding: 170,
+      padding: 100,
       animate: false,
       idealEdgeLength: 200,
       fit: true,

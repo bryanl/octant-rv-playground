@@ -5,19 +5,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  EdgeDefinition,
-  LayoutOptions,
-  NodeDefinition,
-  NodeSingular,
-  Stylesheet,
-} from 'cytoscape';
+import { NodeSingular } from 'cytoscape';
 import {
   CytoscapeGraphComponent,
   GraphState,
 } from '../../modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
-import { CytoscapeNodeHtmlParams } from '../../modules/cytoscape/cytoscape-graph/node-html-label';
-import { GraphData, Node } from '../../services/data/data.service';
+import { GraphConfig } from '../../modules/cytoscape/cytoscape-graph/graph_config';
+import { GraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
+import { Node } from '../../services/data/data.service';
 import { ResourceViewerService } from '../../services/resource-viewer/resource-viewer.service';
 import { SlidingSidebarComponent } from '../sliding-sidebar/sliding-sidebar.component';
 
@@ -34,13 +29,9 @@ export class ResourceViewerComponent implements OnInit, AfterViewInit {
   sidebar: SlidingSidebarComponent;
 
   @Input()
-  graphConfig: GraphData;
+  graphData: GraphData;
 
-  nodes: NodeDefinition[];
-  edges: EdgeDefinition[];
-  layoutOptions: LayoutOptions;
-  style: Stylesheet[];
-  nodeHtmlParams: CytoscapeNodeHtmlParams[];
+  graphConfig: GraphConfig;
 
   zoom = 1;
 
@@ -49,13 +40,7 @@ export class ResourceViewerComponent implements OnInit, AfterViewInit {
   constructor(private resourceViewerService: ResourceViewerService) {}
 
   ngOnInit(): void {
-    this.nodes = this.graphConfig.nodes;
-    this.edges = this.graphConfig.edges;
-
-    const graphConfig = this.resourceViewerService.config();
-    this.layoutOptions = graphConfig.layoutOptions;
-    this.style = graphConfig.style;
-    this.nodeHtmlParams = graphConfig.nodeHtmlParams;
+    this.graphConfig = this.resourceViewerService.config();
   }
 
   ngAfterViewInit(): void {

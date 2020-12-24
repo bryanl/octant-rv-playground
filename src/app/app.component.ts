@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService, GraphData } from './services/data/data.service';
+import { GraphData } from './modules/cytoscape/cytoscape-graph/graph_data';
+import { DataService } from './services/data/data.service';
 
 @Component({
   selector: 'app-root',

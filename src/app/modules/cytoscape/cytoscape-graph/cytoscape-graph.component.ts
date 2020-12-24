@@ -9,18 +9,15 @@ import {
 import * as cy from 'cytoscape';
 import cytoscape, {
   CytoscapeOptions,
-  EdgeDefinition,
-  LayoutOptions,
-  NodeDefinition,
   NodeSingular,
   Position,
   SelectionType,
-  Stylesheet,
 } from 'cytoscape';
 import cola from 'cytoscape-cola';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import dagre from 'cytoscape-dagre';
-import { CytoscapeNodeHtmlParams } from './node-html-label';
+import { GraphConfig } from './graph_config';
+import { GraphData } from './graph_data';
 
 const nodeHtmlLabel = require('cytoscape-node-html-label');
 
@@ -43,10 +40,7 @@ export class CytoscapeGraphComponent {
   cyGraph: ElementRef;
 
   @Input()
-  nodes: NodeDefinition[];
-
-  @Input()
-  edges: EdgeDefinition[];
+  data: GraphData;
 
   @Input()
   pan: Position;
@@ -55,13 +49,7 @@ export class CytoscapeGraphComponent {
   selectionType: SelectionType;
 
   @Input()
-  style: Stylesheet[];
-
-  @Input()
-  layoutOptions: LayoutOptions;
-
-  @Input()
-  nodeHtmlParams: CytoscapeNodeHtmlParams[];
+  config: GraphConfig;
 
   @Input()
   zoom = 1;
@@ -104,7 +92,7 @@ export class CytoscapeGraphComponent {
       container: this.cyGraph.nativeElement,
       pan: this.pan,
       selectionType: this.selectionType,
-      style: this.style,
+      style: this.config ? this.config.style : undefined,
       zoom: this.zoom,
       minZoom: -10,
       maxZoom: 10,
@@ -112,22 +100,25 @@ export class CytoscapeGraphComponent {
 
     this.cy = cytoscape(cyOptions);
 
-    if (this.nodeHtmlParams) {
-      (this.cy as any).nodeHtmlLabel(this.nodeHtmlParams);
+    if (this.config.nodeHtmlParams) {
+      (this.cy as any).nodeHtmlLabel(this.config.nodeHtmlParams);
     }
 
     this.cy.startBatch();
     this.cy.nodes().remove();
     this.cy.edges().remove();
-    if (this.nodes) {
-      this.cy.add(this.nodes);
-    }
-    if (this.edges) {
-      this.cy.add(this.edges);
+    if (this.data) {
+      if (this.data.nodes) {
+        this.cy.add(this.data.nodes);
+      }
+
+      if (this.data.edges) {
+        this.cy.add(this.data.edges);
+      }
     }
     this.cy.endBatch();
-    if (this.layoutOptions) {
-      this.cy.layout(this.layoutOptions).run();
+    if (this.config.layoutOptions) {
+      this.cy.layout(this.config.layoutOptions).run();
     }
 
     this.cy.reset();
