@@ -3,33 +3,13 @@
     <div class="branding">
       <a href="#" class="nav-link">
         <clr-icon shape="vm-bug"></clr-icon>
-        <span class="title">RV Playground</span>
+        <span class="title">Resource Viewer Playground</span>
       </a>
     </div>
   </header>
   <div class="content-container">
     <div class="content-area">
-      <div class="wrapper">
-        <app-cytoscape-graph
-          #graph
-          [nodes]="nodes"
-          [edges]="edges"
-          [zoom]="zoom"
-          [layoutOptions]="layoutOptions"
-          [style]="style"
-          [nodeHtmlParams]="nodeHtmlParams"
-          (state)="handleGraphState($event)"
-          (selected)="handleGraphSelected($event)"
-        ></app-cytoscape-graph>
-        <app-sliding-sidebar #sidebar></app-sliding-sidebar>
-        <app-graph-controls
-          #controls
-          [zoom]="state.zoom"
-          (zoomIn)="handleZoomIn()"
-          (zoomOut)="handleZoomOut()"
-          (maximize)="handleMaximize()"
-        ></app-graph-controls>
-      </div>
+      <app-resource-viewer></app-resource-viewer>
     </div>
   </div>
 </div>

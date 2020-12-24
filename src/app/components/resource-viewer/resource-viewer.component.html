@@ -1,0 +1,21 @@
+<div class="wrapper">
+  <app-cytoscape-graph
+    #graph
+    [nodes]="nodes"
+    [edges]="edges"
+    [zoom]="zoom"
+    [layoutOptions]="layoutOptions"
+    [style]="style"
+    [nodeHtmlParams]="nodeHtmlParams"
+    (state)="handleGraphState($event)"
+    (selected)="handleGraphSelected($event)"
+  ></app-cytoscape-graph>
+  <app-sliding-sidebar #sidebar></app-sliding-sidebar>
+  <app-graph-controls
+    #controls
+    [zoom]="state.zoom"
+    (zoomIn)="handleZoomIn()"
+    (zoomOut)="handleZoomOut()"
+    (maximize)="handleMaximize()"
+  ></app-graph-controls>
+</div>
