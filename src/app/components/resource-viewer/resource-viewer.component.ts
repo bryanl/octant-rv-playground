@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   EdgeDefinition,
   LayoutOptions,
@@ -11,7 +17,8 @@ import {
   GraphState,
 } from '../../modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
 import { CytoscapeNodeHtmlParams } from '../../modules/cytoscape/cytoscape-graph/node-html-label';
-import { DataService } from '../../services/data/data.service';
+import { GraphData, Node } from '../../services/data/data.service';
+import { ResourceViewerService } from '../../services/resource-viewer/resource-viewer.service';
 import { SlidingSidebarComponent } from '../sliding-sidebar/sliding-sidebar.component';
 
 @Component({
@@ -26,6 +33,9 @@ export class ResourceViewerComponent implements OnInit, AfterViewInit {
   @ViewChild('sidebar')
   sidebar: SlidingSidebarComponent;
 
+  @Input()
+  graphConfig: GraphData;
+
   nodes: NodeDefinition[];
   edges: EdgeDefinition[];
   layoutOptions: LayoutOptions;
@@ -36,19 +46,23 @@ export class ResourceViewerComponent implements OnInit, AfterViewInit {
 
   state: GraphState = {};
 
-  constructor(private dataService: DataService) {}
+  constructor(private resourceViewerService: ResourceViewerService) {}
 
   ngOnInit(): void {
-    this.nodes = this.dataService.nodes();
-    this.edges = this.dataService.edges();
-    this.layoutOptions = this.dataService.layoutOptions();
-    this.style = this.dataService.style();
-    this.nodeHtmlParams = this.dataService.nodeHtmlParams();
+    this.nodes = this.graphConfig.nodes;
+    this.edges = this.graphConfig.edges;
+
+    const graphConfig = this.resourceViewerService.config();
+    this.layoutOptions = graphConfig.layoutOptions;
+    this.style = graphConfig.style;
+    this.nodeHtmlParams = graphConfig.nodeHtmlParams;
   }
 
   ngAfterViewInit(): void {
     this.graph.render();
   }
+
+  setNodes(nodes: Node[]): void {}
 
   handleGraphState(state: GraphState): void {
     this.state = state;
