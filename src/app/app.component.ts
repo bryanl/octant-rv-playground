@@ -1,16 +1,18 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {
-  CytoscapeGraphComponent,
-  GraphState,
-} from './modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
-import {
   EdgeDefinition,
   LayoutOptions,
   NodeDefinition,
+  NodeSingular,
   Stylesheet,
 } from 'cytoscape';
-import { DataService } from './services/data/data.service';
+import { SlidingSidebarComponent } from './components/sliding-sidebar/sliding-sidebar.component';
+import {
+  CytoscapeGraphComponent,
+  GraphState,
+} from './modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
 import { CytoscapeNodeHtmlParams } from './modules/cytoscape/cytoscape-graph/node-html-label';
+import { DataService } from './services/data/data.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +22,9 @@ import { CytoscapeNodeHtmlParams } from './modules/cytoscape/cytoscape-graph/nod
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('graph')
   graph: CytoscapeGraphComponent;
+
+  @ViewChild('sidebar')
+  sidebar: SlidingSidebarComponent;
 
   title = 'rv-playground';
 
@@ -50,6 +55,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   handleGraphState(state: GraphState): void {
     this.state = state;
     this.zoom = state.zoom;
+  }
+
+  handleGraphSelected(node: NodeSingular): void {
+    console.log('selected', node.data('id'));
+    this.sidebar.isClosed = false;
   }
 
   handleZoomIn(): void {

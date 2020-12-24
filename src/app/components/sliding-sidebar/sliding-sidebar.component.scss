@@ -1,4 +1,4 @@
-$sidebar__width: 20em;
+$sidebar__width: 20rem;
 $toggle__height: 30px;
 $border: 24px;
 
@@ -13,11 +13,15 @@ $border: 24px;
 
 .sidebar {
   height: 100%;
-  background-color: pink;
+  background-color: hsl(198, 0%, 95%);
+  border: 2px solid hsl(198, 0%, 80%);
   transition: transform 500ms ease-in-out;
+  padding: 12px;
+  margin: 4px 0;
 
   .toggle {
     height: $toggle__height;
+    width: 80px;
     position: absolute;
     transform-origin: 0 0;
     transform: rotate(-90deg);

@@ -1,5 +1,15 @@
 <div class="sidebar" [ngClass]="{ 'is-closed': isClosed }">
-  <button class="toggle" (click)="toggleClosed()">
+  <button class="btn btn-outline toggle" (click)="toggleClosed()">
     {{ isClosed | slidingSidebarToggleLabel }}
   </button>
+
+  <h3>Configuration</h3>
+  <table class="table table-vertical">
+    <tbody>
+      <tr>
+        <th>Selector</th>
+        <td>foo</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

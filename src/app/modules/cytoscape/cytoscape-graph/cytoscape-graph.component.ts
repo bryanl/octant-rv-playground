@@ -3,10 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
-  OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import * as cy from 'cytoscape';
@@ -15,14 +12,16 @@ import cytoscape, {
   EdgeDefinition,
   LayoutOptions,
   NodeDefinition,
+  NodeSingular,
   Position,
   SelectionType,
   Stylesheet,
 } from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-import coseBilkent from 'cytoscape-cose-bilkent';
 import cola from 'cytoscape-cola';
+import coseBilkent from 'cytoscape-cose-bilkent';
+import dagre from 'cytoscape-dagre';
 import { CytoscapeNodeHtmlParams } from './node-html-label';
+
 const nodeHtmlLabel = require('cytoscape-node-html-label');
 
 cy.use(dagre);
@@ -69,6 +68,9 @@ export class CytoscapeGraphComponent {
 
   @Output()
   state: EventEmitter<GraphState> = new EventEmitter<GraphState>();
+
+  @Output()
+  selected: EventEmitter<NodeSingular> = new EventEmitter<cytoscape.NodeSingular>();
 
   private cy: cy.Core;
 
@@ -132,14 +134,21 @@ export class CytoscapeGraphComponent {
     this.cy.center();
 
     this.cy.on('zoom', this.emitState.bind(this));
+    this.cy.on('select', this.emitSelected.bind(this));
+
     this.initialZoom = this.cy.zoom();
     this.initialPosition = this.cy.pan();
 
-    this.emitState(null);
+    this.emitState();
   }
 
-  emitState(_): void {
+  emitSelected(ev): void {
+    this.selected.emit(ev.target);
+  }
+
+  emitState(): void {
     this.zoom = this.cy.zoom();
+
     const state: GraphState = {
       zoom: this.cy.zoom(),
     };
@@ -157,6 +166,4 @@ export class CytoscapeGraphComponent {
   maximize(): void {
     this.cy.fit();
   }
-
-  private update(): void {}
 }
