@@ -161,6 +161,16 @@ export class ResourceViewerService {
     <span>Deployment ${data.label}</span>
 </div>`,
       },
+      {
+        ...defaultLabelPosition,
+        query: '.apps-DaemonSet',
+        tpl: data =>
+          `
+<div style="${styleToString(deploymentStyle)}">
+     ${nodeStatus(data)}
+    <span>DaemonSet ${data.label}</span>
+</div>`,
+      },
     ];
   }
 }
