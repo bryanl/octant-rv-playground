@@ -1,6 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EdgeDefinition, NodeDefinition } from 'cytoscape';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { GraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
+
+interface NodeResponse {
+  nodes: Node[];
+}
 
 export interface Node {
   id: string;
@@ -165,16 +172,27 @@ const nodeList: Node[] = [
   providedIn: 'root',
 })
 export class DataService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  graphData(): GraphData {
-    const generator = new BOMGenerator(nodeList);
-    const gen = generator.generate();
+  graphData(): Observable<GraphData> {
+    return new Observable<GraphData>(observer => {
+      this.get()
+        .pipe(take(1))
+        .subscribe(resp => {
+          const generator = new BOMGenerator(resp.nodes);
+          const gen = generator.generate();
 
-    return {
-      nodes: gen.nodes,
-      edges: gen.edges,
-    };
+          observer.next(gen);
+        });
+
+      return {
+        unsubscribe(): void {},
+      };
+    });
+  }
+
+  get(): Observable<NodeResponse> {
+    return this.http.get<NodeResponse>('http://localhost:8181/v1/nodes');
   }
 }
 

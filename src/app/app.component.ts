@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { GraphData } from './modules/cytoscape/cytoscape-graph/graph_data';
 import { DataService } from './services/data/data.service';
 
@@ -8,7 +9,7 @@ import { DataService } from './services/data/data.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  graphConfig: GraphData;
+  graphConfig: Observable<GraphData>;
 
   constructor(private dataService: DataService) {}
 

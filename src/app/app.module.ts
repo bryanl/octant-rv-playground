@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -26,6 +27,7 @@ import { ResourceViewerComponent } from './components/resource-viewer/resource-v
     CytoscapeModule,
     AppRoutingModule,
     ClarityModule,
+    HttpClientModule,
     BrowserAnimationsModule,
   ],
   providers: [],
