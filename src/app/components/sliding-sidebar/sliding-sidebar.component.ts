@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NodeSingular } from 'cytoscape';
 
 @Component({
   selector: 'app-sliding-sidebar',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sliding-sidebar.component.scss'],
 })
 export class SlidingSidebarComponent implements OnInit {
+  node: any;
+
   isClosed = true;
 
   constructor() {}
@@ -13,6 +16,15 @@ export class SlidingSidebarComponent implements OnInit {
   ngOnInit(): void {}
 
   toggleClosed(): void {
-    this.isClosed = !this.isClosed;
+    if (this.node) {
+      this.isClosed = !this.isClosed;
+    }
+  }
+
+  show(node: NodeSingular): void {
+    this.node = node.data();
+    if (this.node) {
+      this.isClosed = false;
+    }
   }
 }

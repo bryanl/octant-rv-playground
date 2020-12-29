@@ -1,4 +1,4 @@
-$sidebar__width: 20rem;
+$sidebar__width: 25rem;
 $toggle__height: 30px;
 $border: 24px;
 
@@ -32,5 +32,14 @@ $border: 24px;
 
   &.is-closed {
     transform: translateX($sidebar__width);
+  }
+
+  &-header {
+    h3 {
+      margin-top: 0;
+    }
+    h4 {
+      margin-top: 4px;
+    }
   }
 }

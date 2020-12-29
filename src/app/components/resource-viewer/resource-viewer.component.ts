@@ -1,13 +1,4 @@
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NodeSingular } from 'cytoscape';
 import {
   CytoscapeGraphComponent,
@@ -15,7 +6,6 @@ import {
 } from '../../modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
 import { GraphConfig } from '../../modules/cytoscape/cytoscape-graph/graph_config';
 import { GraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
-import { Node } from '../../services/data/data.service';
 import { ResourceViewerService } from '../../services/resource-viewer/resource-viewer.service';
 import { SlidingSidebarComponent } from '../sliding-sidebar/sliding-sidebar.component';
 
@@ -56,8 +46,7 @@ export class ResourceViewerComponent implements OnInit {
   }
 
   handleGraphSelected(node: NodeSingular): void {
-    console.log('selected', node.data('id'));
-    this.sidebar.isClosed = false;
+    this.sidebar.show(node);
   }
 
   handleZoomIn(): void {

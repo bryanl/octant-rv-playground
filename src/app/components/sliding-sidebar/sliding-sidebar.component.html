@@ -3,13 +3,12 @@
     {{ isClosed | slidingSidebarToggleLabel }}
   </button>
 
-  <h3>Configuration</h3>
-  <table class="table table-vertical">
-    <tbody>
-      <tr>
-        <th>Selector</th>
-        <td>foo</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="sidebar-header">
+    <h3>{{ node?.label }}</h3>
+    <h4>{{ node?.description }}</h4>
+  </div>
+
+  <pre>
+    {{ node | json }}
+  </pre>
 </div>
