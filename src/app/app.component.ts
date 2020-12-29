@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { GraphData } from './modules/cytoscape/cytoscape-graph/graph_data';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ResourceViewerComponent } from './components/resource-viewer/resource-viewer.component';
 import { DataService } from './services/data/data.service';
 
 @Component({
@@ -8,13 +8,25 @@ import { DataService } from './services/data/data.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-  graphConfig: Observable<GraphData>;
+export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('resourceViewer')
+  resourceViewer: ResourceViewerComponent;
+
+  private graphDataSubscription: Subscription;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.graphConfig = this.dataService.graphData();
-    console.log({ ...this.graphConfig });
+    this.graphDataSubscription = this.dataService
+      .graphData()
+      .subscribe(graphData => {
+        this.resourceViewer.setGraphData(graphData);
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.graphDataSubscription) {
+      this.graphDataSubscription.unsubscribe();
+    }
   }
 }

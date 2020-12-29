@@ -1,8 +1,11 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   Input,
+  OnChanges,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { NodeSingular } from 'cytoscape';
@@ -21,14 +24,13 @@ import { SlidingSidebarComponent } from '../sliding-sidebar/sliding-sidebar.comp
   templateUrl: './resource-viewer.component.html',
   styleUrls: ['./resource-viewer.component.scss'],
 })
-export class ResourceViewerComponent implements OnInit, AfterViewInit {
+export class ResourceViewerComponent implements OnInit {
   @ViewChild('graph')
   graph: CytoscapeGraphComponent;
 
   @ViewChild('sidebar')
   sidebar: SlidingSidebarComponent;
 
-  @Input()
   graphData: GraphData;
 
   graphConfig: GraphConfig;
@@ -43,11 +45,10 @@ export class ResourceViewerComponent implements OnInit, AfterViewInit {
     this.graphConfig = this.resourceViewerService.config();
   }
 
-  ngAfterViewInit(): void {
+  setGraphData(graphData: GraphData): void {
+    this.graphData = graphData;
     this.graph.render();
   }
-
-  setNodes(nodes: Node[]): void {}
 
   handleGraphState(state: GraphState): void {
     this.state = state;

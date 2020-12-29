@@ -18,6 +18,7 @@ export interface Node {
   parent?: string;
   extra?: { [key: string]: any };
   targets?: string[];
+  keywords?: string[];
 }
 
 const nodeList: Node[] = [
@@ -176,6 +177,10 @@ export class DataService {
 
   graphData(): Observable<GraphData> {
     return new Observable<GraphData>(observer => {
+      // const generator = new BOMGenerator(nodeList);
+      // const gen = generator.generate();
+      // observer.next(gen);
+
       this.get()
         .pipe(take(1))
         .subscribe(resp => {
@@ -208,10 +213,15 @@ class BOMGenerator {
 
   private nodeDefinitions(): NodeDefinition[] {
     return this.nodes.map(node => {
+      const keywords = [node.group ? `${node.group}-${node.kind}` : node.kind];
+      if (node.keywords) {
+        keywords.push(...node.keywords);
+      }
+
       const apiVersion = node.group
         ? `${node.group}/${node.version}`
         : node.version;
-      const classes = node.group ? `${node.group}-${node.kind}` : node.kind;
+      const classes = keywords.join(' ');
       const description = `${apiVersion} ${node.kind}`;
 
       return {

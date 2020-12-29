@@ -22,7 +22,7 @@ export class ResourceViewerService {
       name: 'cose-bilkent',
       padding: 100,
       animate: false,
-      idealEdgeLength: 200,
+      idealEdgeLength: 75,
       fit: true,
 
       // name: 'cola',
@@ -83,7 +83,7 @@ export class ResourceViewerService {
         },
       },
       {
-        selector: '.apps-ReplicaSet',
+        selector: '.podSummary',
         css: {
           'border-width': 1,
           'border-color': 'gray',
@@ -101,7 +101,7 @@ export class ResourceViewerService {
         },
       },
       {
-        selector: '.apps-ReplicaSet:selected',
+        selector: '.podSummary:selected',
         css: {
           'border-width': 2,
           'border-color': 'hsl(198, 66%, 57%)',
@@ -119,7 +119,7 @@ export class ResourceViewerService {
   }
 
   private nodeHtmlParams(): CytoscapeNodeHtmlParams[] {
-    const deploymentStyle = {
+    const workloadStyle = {
       'background-color': 'hsl(198, 0%, 0%)',
       'border-radius': '4px',
       color: '#fff',
@@ -153,22 +153,12 @@ export class ResourceViewerService {
       },
       {
         ...defaultLabelPosition,
-        query: '.apps-Deployment',
+        query: '.workloadOwner',
         tpl: data =>
           `
-<div style="${styleToString(deploymentStyle)}">
+<div style="${styleToString(workloadStyle)}">
      ${nodeStatus(data)}
-    <span>Deployment ${data.label}</span>
-</div>`,
-      },
-      {
-        ...defaultLabelPosition,
-        query: '.apps-DaemonSet',
-        tpl: data =>
-          `
-<div style="${styleToString(deploymentStyle)}">
-     ${nodeStatus(data)}
-    <span>DaemonSet ${data.label}</span>
+    <span>${data.kind} ${data.label}</span>
 </div>`,
       },
     ];
