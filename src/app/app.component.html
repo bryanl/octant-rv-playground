@@ -9,7 +9,7 @@
   </header>
   <div class="content-container">
     <div class="content-area">
-      <app-resource-viewer #resourceViewer></app-resource-viewer>
+      <app-resource-viewer #resourceViewer [graphData]="graphData | async"></app-resource-viewer>
     </div>
   </div>
 </div>

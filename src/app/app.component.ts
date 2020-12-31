@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ResourceViewerComponent } from './components/resource-viewer/resource-viewer.component';
+import { DecoratedGraphEdgeWrapper, DecoratedGraphNodeWrapper, GraphType } from './modules/cytoscape/types/graph';
+import { GraphData } from './modules/cytoscape/types/graph-data';
 import { DataService } from './services/data/data.service';
 
 @Component({
@@ -13,15 +16,26 @@ export class AppComponent implements OnInit, OnDestroy {
   resourceViewer: ResourceViewerComponent;
 
   private graphDataSubscription: Subscription;
+  graphData: Observable<GraphData>;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.graphDataSubscription = this.dataService
-      .graphData()
-      .subscribe(graphData => {
-        this.resourceViewer.setGraphData(graphData);
-      });
+    this.graphData = this.dataService.graphData().pipe(
+      map(og => {
+        console.log(og);
+
+        return {
+          elements: {
+            nodes: og.nodes as DecoratedGraphNodeWrapper[],
+            edges: og.edges as DecoratedGraphEdgeWrapper[],
+          },
+          fetchParams: {
+            graphType: GraphType.RESOURCE_VIEWER,
+          },
+        };
+      })
+    );
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,6 @@
 import { EdgeDefinition, NodeDefinition } from 'cytoscape';
 
-export interface GraphData {
+export interface OldGraphData {
   nodes?: NodeDefinition[];
   edges?: EdgeDefinition[];
 }

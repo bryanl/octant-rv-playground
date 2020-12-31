@@ -19,6 +19,9 @@ export class ResourceViewerService {
 
   private layoutOptions(): LayoutOptions {
     return {
+      // name: 'cose',
+      // animate: false,
+
       name: 'cose-bilkent',
       padding: 100,
       animate: false,
@@ -28,7 +31,7 @@ export class ResourceViewerService {
       // name: 'cola',
       // animate: false,
       // fit: true,
-      // padding: 150,
+      // // padding: 150,
       // nodeSpacing: (node: NodeSingular): number => {
       //   if (node.data('parent') === undefined) {
       //     return 70;

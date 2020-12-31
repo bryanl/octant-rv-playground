@@ -1,30 +1,20 @@
 import {
+  AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import * as cy from 'cytoscape';
-import cytoscape, {
-  CytoscapeOptions,
-  NodeSingular,
-  Position,
-  SelectionType,
-} from 'cytoscape';
-import cola from 'cytoscape-cola';
-import coseBilkent from 'cytoscape-cose-bilkent';
-import dagre from 'cytoscape-dagre';
+import * as Cy from 'cytoscape';
+import cytoscape, { NodeSingular, Position, SelectionType } from 'cytoscape';
+import { CytoscapeClickEvent, CytoscapeGlobalScratchData, CytoscapeGlobalScratchNamespace } from '../types/graph';
+import { GraphData } from '../types/graph-data';
+import * as graphUtils from './graph-utils';
 import { GraphConfig } from './graph_config';
-import { GraphData } from './graph_data';
-
-const nodeHtmlLabel = require('cytoscape-node-html-label');
-
-cy.use(dagre);
-cy.use(coseBilkent);
-cy.use(cola);
-nodeHtmlLabel(cy);
+import { WrapperComponent } from './wrapper/wrapper.component';
 
 export interface GraphState {
   zoom?: number;
@@ -32,15 +22,12 @@ export interface GraphState {
 
 @Component({
   selector: 'app-cytoscape-graph',
-  template: ` <div #cyGraph class="graphWrapper"></div> `,
+  template: `<app-wrapper #wrapper></app-wrapper>`,
   styleUrls: ['./cytoscape-graph.component.scss'],
 })
-export class CytoscapeGraphComponent {
-  @ViewChild('cyGraph')
-  cyGraph: ElementRef;
-
-  @Input()
-  data: GraphData;
+export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
+  @ViewChild('wrapper')
+  wrapper: WrapperComponent;
 
   @Input()
   pan: Position;
@@ -54,107 +41,177 @@ export class CytoscapeGraphComponent {
   @Input()
   zoom = 1;
 
+  @Input()
+  graphData: GraphData;
+
   @Output()
   state: EventEmitter<GraphState> = new EventEmitter<GraphState>();
 
   @Output()
   selected: EventEmitter<NodeSingular> = new EventEmitter<cytoscape.NodeSingular>();
 
-  private cy: cy.Core;
+  @Output()
+  updateSummary: EventEmitter<CytoscapeClickEvent> = new EventEmitter<CytoscapeClickEvent>();
+
+  @Output()
+  ready: EventEmitter<Cy.Core> = new EventEmitter<cytoscape.Core>();
 
   loading = false;
-  private initialZoom: number;
-  private initialPosition: cytoscape.Position;
+  private customViewport: boolean;
 
   constructor() {}
 
-  render(): void {
-    this.runWhileLoading(this.rerender.bind(this));
-  }
-
-  private runWhileLoading(f: () => void): void {
-    this.loading = true;
-    setTimeout(() => {
-      f();
-      setTimeout(() => {
-        this.loading = false;
-      }, 30);
-    }, 0);
-  }
-
-  private rerender(): void {
-    if (!this.cyGraph) {
-      console.warn(`No cyGraph found`);
+  ngOnChanges(changes: SimpleChanges): void {
+    const cy = this.getCy();
+    if (!cy) {
       return;
     }
 
-    const cyOptions: CytoscapeOptions = {
-      container: this.cyGraph.nativeElement,
-      pan: this.pan,
-      selectionType: this.selectionType,
-      style: this.config ? this.config.style : undefined,
-      zoom: this.zoom,
-      minZoom: -10,
-      maxZoom: 10,
-    };
+    let updateLayout = false;
 
-    this.cy = cytoscape(cyOptions);
-
-    if (this.config.nodeHtmlParams) {
-      (this.cy as any).nodeHtmlLabel(this.config.nodeHtmlParams);
+    const graphData = changes.graphData;
+    if (this.elementsNeedRelayout(graphData.previousValue.elements, graphData.currentValue.elements)) {
+      updateLayout = true;
     }
 
-    this.cy.startBatch();
-    this.cy.nodes().remove();
-    this.cy.edges().remove();
-    if (this.data) {
-      if (this.data.nodes) {
-        this.cy.add(this.data.nodes);
-      }
-
-      if (this.data.edges) {
-        this.cy.add(this.data.edges);
-      }
-    }
-    this.cy.endBatch();
-    if (this.config.layoutOptions) {
-      this.cy.layout(this.config.layoutOptions).run();
-    }
-
-    this.cy.reset();
-    this.cy.center();
-
-    this.cy.on('zoom', this.emitState.bind(this));
-    this.cy.on('select', this.emitSelected.bind(this));
-
-    this.initialZoom = this.cy.zoom();
-    this.initialPosition = this.cy.pan();
-
-    this.emitState();
+    this.processGraphUpdate(cy, updateLayout);
   }
 
-  emitSelected(ev): void {
-    this.selected.emit(ev.target);
+  getCy(): null | cytoscape.Core {
+    if (this.wrapper) {
+      return this.wrapper.getCy();
+    }
+
+    return null;
   }
 
-  emitState(): void {
-    this.zoom = this.cy.zoom();
-
-    const state: GraphState = {
-      zoom: this.cy.zoom(),
-    };
-    this.state.emit(state);
+  ngAfterViewInit(): void {
+    this.cyInitialization(this.getCy());
   }
 
   zoomIn(): void {
-    this.cy.zoom(this.zoom + 0.01);
+    this.getCy().zoom(this.zoom + 0.01);
   }
 
   zoomOut(): void {
-    this.cy.zoom(this.zoom - 0.01);
+    this.getCy().zoom(this.zoom - 0.01);
   }
 
   maximize(): void {
-    this.cy.fit();
+    this.getCy().fit();
+  }
+
+  private cyInitialization(cy: Cy.Core): void {
+    if (!cy) {
+      return;
+    }
+
+    // TODO: move event handlers somewhere else
+    cy.on('fit', (event: Cy.EventObject): void => {
+      const cytoscapeEvent = graphUtils.getCytoscapeBaseEvent(cy, event);
+      if (cytoscapeEvent) {
+        this.customViewport = false;
+      }
+    });
+
+    cy.on('nodehtml-create-or-update', 'node', (event: Cy.EventObjectNode, data: any): void => {
+      const { label, isNew } = data;
+      const { target } = event;
+      const node = label.getNode();
+
+      if (isNew) {
+        node.setAttribute('data-node-id', target.id());
+      }
+
+      if (target.isParent) {
+        return;
+      }
+
+      graphUtils.expandNodeBounds(target, node);
+    });
+
+    cy.on('layoutstop', (_: Cy.EventObject) => {
+      graphUtils.safeFit(cy);
+      graphUtils.fixLoopOverlap(cy);
+    });
+
+    cy.ready((event: Cy.EventObject) => {
+      this.ready.emit(event.cy);
+      this.processGraphUpdate(cy, true);
+    });
+
+    cy.on('destroy', (_: Cy.EventObject) => {
+      this.wrapper.destroy();
+      this.updateSummary.emit({ summaryType: 'graph', summaryTarget: undefined });
+    });
+  }
+
+  private processGraphUpdate(cy: Cy.Core, updateLayout: boolean): void {
+    if (!this.graphData) {
+      return;
+    }
+
+    const globalScratchData: CytoscapeGlobalScratchData = {
+      graphType: this.graphData.fetchParams.graphType,
+      showNodeLabels: true, // TODO: is this right?
+    };
+    cy.scratch(CytoscapeGlobalScratchNamespace, globalScratchData);
+
+    cy.startBatch();
+
+    if (updateLayout) {
+      cy.nodes().positions({ x: 0, y: 0 });
+    }
+
+    cy.json({ elements: this.graphData.elements });
+
+    cy.endBatch();
+
+    if (updateLayout) {
+      graphUtils.runLayout(cy, this.config.layoutOptions);
+    }
+
+    cy.nodes().unselectify();
+    cy.edges().unselectify();
+
+    if (cy.$(':selected').length === 0) {
+      this.handleTap({ summaryType: 'graph', summaryTarget: cy });
+    }
+  }
+
+  private handleTap(event: CytoscapeClickEvent): void {
+    this.updateSummary.emit(event);
+  }
+
+  private elementsNeedRelayout(prevElements: any, nextElements: any): boolean {
+    if (prevElements === nextElements) {
+      return false;
+    }
+
+    if (
+      !prevElements ||
+      !nextElements ||
+      !prevElements.nodes ||
+      !prevElements.edges ||
+      !nextElements.nodes ||
+      !nextElements.edges ||
+      prevElements.nodes.length !== nextElements.nodes.length ||
+      prevElements.edges.length !== nextElements.edges.length
+    ) {
+      return true;
+    }
+
+    return !(
+      this.nodeOrEdgeArrayHasSameIds(nextElements.nodes, prevElements.nodes) &&
+      this.nodeOrEdgeArrayHasSameIds(nextElements.edges, prevElements.edges)
+    );
+  }
+
+  private nodeOrEdgeArrayHasSameIds<T extends Cy.NodeSingular | Cy.EdgeSingular>(a: Array<T>, b: Array<T>): boolean {
+    const aIds = a.map(e => e.id).sort();
+    return b
+      .map(e => e.id)
+      .sort()
+      .every((eId, index) => eId === aIds[index]);
   }
 }
