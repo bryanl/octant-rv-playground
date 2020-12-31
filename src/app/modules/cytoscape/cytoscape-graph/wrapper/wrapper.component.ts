@@ -3,15 +3,16 @@ import cytoscape, * as Cy from 'cytoscape';
 import cola from 'cytoscape-cola';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import dagre from 'cytoscape-dagre';
+import groupCompoundLayout from '../layout/group-command-layout';
 import { GraphStyles } from '../graph-styles';
-import GroupCompoundLayout from '../layout/graph-compound-layout';
 
 const nodeHtmlLabel = require('cy-node-html-label');
 
 Cy.use(cola);
 Cy.use(coseBilkent);
 Cy.use(dagre);
-cytoscape('layout', 'group-compound-layout', GroupCompoundLayout);
+Cy.use(groupCompoundLayout);
+
 nodeHtmlLabel(Cy);
 
 @Component({

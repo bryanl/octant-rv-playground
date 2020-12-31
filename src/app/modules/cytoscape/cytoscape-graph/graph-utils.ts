@@ -1,4 +1,5 @@
 import * as Cy from 'cytoscape';
+import { DagreGraph } from '../graphs/dagre-graph';
 import * as LayoutDictionary from '../graphs/layout-dictionary';
 import { CyNode } from '../types/cy-node';
 import {
@@ -31,20 +32,18 @@ export const runLayout = (cy: Cy.Core, layout: Layout) => {
   (cy as any).nodeHtmlLabel().updateNodeLabel(cy.nodes());
 
   const layoutOptions = LayoutDictionary.getLayout(layout);
-  // NOTE: compound layout
-  // if (cy.nodes('$node > node').length > 0) {
-  //   // if there is a compound node, run the compound layout
-  //   cy.layout({
-  //     ...layoutOptions,
-  //     name: 'group-compound-layout',
-  //     compoundLayoutOptions: LayoutDictionary.getLayout(DagreGraph.getLayout()),
-  //   }).run();
-  // } else {
-  //   cy.layout(layoutOptions).run();
-  // }
+  if (cy.nodes('$node > node').length > 0) {
+    // if there is a compound node, run the compound layout
+    cy.layout({
+      ...layoutOptions,
+      name: 'group-compound-layout',
+      realLayout: layout.name,
+      compoundLayoutOptions: LayoutDictionary.getLayout(DagreGraph.getLayout()),
+    }).run();
+  } else {
+    cy.layout(layoutOptions).run();
+  }
 
-  // NOTE: single layout
-  cy.layout(layoutOptions).run();
   cy.scratch(CytoscapeGlobalScratchNamespace).showNodeLabels = showNodeLabels;
 };
 
