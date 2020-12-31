@@ -23,8 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.graphData = this.dataService.graphData().pipe(
       map(og => {
-        console.log(og);
-
         return {
           elements: {
             nodes: og.nodes as DecoratedGraphNodeWrapper[],

@@ -16,7 +16,6 @@ export const ZoomOptions = {
 };
 
 export const safeFit = (cy: Cy.Core, centerElements?: Cy.Collection) => {
-  console.log('safeFit');
   cy.fit(centerElements, ZoomOptions.fitPadding);
   if (cy.zoom() > ZoomOptions.maxZoom) {
     cy.zoom(ZoomOptions.maxZoom);
@@ -29,7 +28,7 @@ export const safeFit = (cy: Cy.Core, centerElements?: Cy.Collection) => {
 export const runLayout = (cy: Cy.Core, layout: Layout) => {
   const showNodeLabels = cy.scratch(CytoscapeGlobalScratchNamespace).showNodeLabels;
 
-  // (cy as any).nodeHtmlLabel().updateNodeLabels(cy.nodes());
+  (cy as any).nodeHtmlLabel().updateNodeLabel(cy.nodes());
 
   const layoutOptions = LayoutDictionary.getLayout(layout);
   // NOTE: compound layout

@@ -3,20 +3,16 @@ import { CytoscapeOptions } from 'cytoscape';
 import { CyNode } from '../types/cy-node';
 import { CytoscapeGlobalScratchData, CytoscapeGlobalScratchNamespace } from '../types/graph';
 import * as color from './clarity-colors';
+import { style } from './css-utils';
 import * as attr from './graph-attributes';
 import { decoratedNodeData } from './graph-utils';
 import * as health from './health';
-
-const style = (o: { [key: string]: any }) =>
-  Object.entries(o)
-    .map<string>(([k, v]) => `${k}:${v};`)
-    .join();
 
 const labelStyleDefault = style({
   borderRadius: '3px',
   boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19)',
   display: 'flex',
-  fontSize: '0',
+  fontSize: '9px',
   fontWeight: 'normal',
   marginTop: '4px',
   lineHeight: '11px',
@@ -290,13 +286,17 @@ export class GraphStyles {
       return node.cy().scratch(CytoscapeGlobalScratchNamespace);
     };
 
-    let content = '';
+    let content: string;
     const cyGlobal = getCyGlobalData(ele);
     const data = decoratedNodeData(ele);
+    content = data.label;
 
     let labelRawStyle = '';
 
-    const isGroup = data.isGroup;
+    let isGroup: string;
+    if (data) {
+      isGroup = data.isGroup;
+    }
 
     if (ele.hasClass(attr.HighlightClass)) {
       labelRawStyle += 'font-size: ' + attr.NodeText.fontSizeHover + ';';
@@ -310,7 +310,7 @@ export class GraphStyles {
       labelRawStyle += 'margin-top: 13px;';
     }
 
-    const badges = `<clr-icon shape="unknown-status"></clr-icon>`;
+    const badges = `<clr-icon shape="success-standard" size='7'></clr-icon>`;
     const hasBadge = badges.length > 0;
 
     if (getCyGlobalData(ele).showNodeLabels) {
@@ -324,11 +324,11 @@ export class GraphStyles {
         contentRawStyle += 'font-size: ' + attr.NodeText.fontSizeHover + ';';
       }
 
-      content = `<div class="${contentStyleDefault} ${
-        hasBadge ? contentStyleWithBadges : ''
-      }" style="${contentRawStyle}">${content}</div>`;
+      content = `<span style="${contentStyleDefault} ${
+        hasBadge ? contentStyleDefault : ''
+      } ${contentRawStyle}">${badges}${content}</span>`;
     }
 
-    return `<div class="${labelStyleDefault}" style="${labelRawStyle}">${badges}${content}</div>`;
+    return `<div style="${labelStyleDefault} ${labelRawStyle}">${content}</div>`;
   }
 }

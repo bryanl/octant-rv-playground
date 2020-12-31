@@ -6,7 +6,7 @@ import dagre from 'cytoscape-dagre';
 import { GraphStyles } from '../graph-styles';
 import GroupCompoundLayout from '../layout/graph-compound-layout';
 
-const nodeHtmlLabel = require('cytoscape-node-html-label');
+const nodeHtmlLabel = require('cy-node-html-label');
 
 Cy.use(cola);
 Cy.use(coseBilkent);

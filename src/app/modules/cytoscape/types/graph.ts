@@ -32,6 +32,10 @@ export interface GraphNodeData {
   parent?: string;
   isIdle?: boolean;
   isGroup?: string;
+
+  apiVersion: string;
+  kind: string;
+  label: string;
 }
 
 export interface GraphEdgeData {
