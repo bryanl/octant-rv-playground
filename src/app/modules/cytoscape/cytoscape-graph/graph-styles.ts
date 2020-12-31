@@ -289,13 +289,13 @@ export class GraphStyles {
     let content: string;
     const cyGlobal = getCyGlobalData(ele);
     const data = decoratedNodeData(ele);
-    content = data.label;
 
     let labelRawStyle = '';
 
     let isGroup: string;
     if (data) {
       isGroup = data.isGroup;
+      content = data.label;
     }
 
     if (ele.hasClass(attr.HighlightClass)) {

@@ -94,12 +94,9 @@ function Layout(options: any): void {
   this.cy = this.options.cy;
   this.elements = this.options.eles;
   this.gen = new SyntheticEdgeGenerator();
-
-  console.log('what is this?', this);
 }
 
 Layout.prototype.run = function run(): void {
-  console.log(this);
   const { realLayout, compoundLayoutOptions } = this.options;
   const parents = this.parents();
   const children = parents.children();
@@ -163,8 +160,6 @@ Layout.prototype.run = function run(): void {
   // This is not absolutely necessary, but without this we have seen some problems with
   //  `cola` + firefox + a particular mesh
   layoutElements.position({ x: 0, y: 0 });
-
-  console.log('real layout name', realLayout);
 
   const layout = this.cy.layout({
     // Create a new layout
