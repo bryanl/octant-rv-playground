@@ -22,7 +22,7 @@ export class SlidingSidebarComponent implements OnInit {
   }
 
   show(node: NodeSingular): void {
-    if (node && Object.entries(node.data()).length > 0) {
+    if (node && Object.entries(node.data()).length > 0 && node.group() === 'nodes') {
       this.node = node.data();
       this.isClosed = false;
     }
