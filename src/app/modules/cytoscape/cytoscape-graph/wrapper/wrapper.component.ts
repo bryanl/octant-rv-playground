@@ -3,14 +3,17 @@ import cytoscape, * as Cy from 'cytoscape';
 import cola from 'cytoscape-cola';
 import coseBilkent from 'cytoscape-cose-bilkent';
 import dagre from 'cytoscape-dagre';
-import groupCompoundLayout from '../layout/group-command-layout';
+import popper from 'cytoscape-popper';
 import { GraphStyles } from '../graph-styles';
+import groupCompoundLayout from '../layout/group-command-layout';
 
 const nodeHtmlLabel = require('cy-node-html-label');
 
 Cy.use(cola);
 Cy.use(coseBilkent);
 Cy.use(dagre);
+Cy.use(popper);
+
 Cy.use(groupCompoundLayout);
 
 nodeHtmlLabel(Cy);

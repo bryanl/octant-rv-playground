@@ -6,6 +6,7 @@
     [config]="graphConfig"
     (state)="handleGraphState($event)"
     (selected)="handleGraphSelected($event)"
+    (doubleTap)="handleDoubleTap($event)"
   ></app-cytoscape-graph>
   <app-sliding-sidebar #sidebar></app-sliding-sidebar>
   <app-graph-controls

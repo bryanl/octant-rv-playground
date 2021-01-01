@@ -20,6 +20,8 @@ export interface CytoscapeBaseEvent {
 }
 
 export interface CytoscapeClickEvent extends CytoscapeBaseEvent {}
+export interface CytoscapeMouseInEvent extends CytoscapeBaseEvent {}
+export interface CytoscapeMouseOutEvent extends CytoscapeBaseEvent {}
 
 export interface Layout {
   name: string;

@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NodeSingular } from 'cytoscape';
 import { CytoscapeGraphComponent, GraphState } from '../../modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
 import { GraphConfig } from '../../modules/cytoscape/cytoscape-graph/graph_config';
+import { CytoscapeBaseEvent } from '../../modules/cytoscape/types/graph';
 import { GraphData } from '../../modules/cytoscape/types/graph-data';
 import { ResourceViewerService } from '../../services/resource-viewer/resource-viewer.service';
 import { SlidingSidebarComponent } from '../sliding-sidebar/sliding-sidebar.component';
@@ -52,5 +53,9 @@ export class ResourceViewerComponent implements OnInit {
 
   handleMaximize(): void {
     this.graph.maximize();
+  }
+
+  handleDoubleTap(event: CytoscapeBaseEvent): void {
+    console.log('double tap', event.summaryTarget);
   }
 }
