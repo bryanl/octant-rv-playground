@@ -9,9 +9,11 @@ $border: 24px;
   right: -$border;
   height: calc(100% + 2 * #{$border});
   margin: -$border auto 0 auto;
+  pointer-events: none;
 }
 
 .sidebar {
+  pointer-events: all;
   height: 100%;
   background-color: hsl(198, 0%, 95%);
   border: 2px solid hsl(198, 0%, 80%);
