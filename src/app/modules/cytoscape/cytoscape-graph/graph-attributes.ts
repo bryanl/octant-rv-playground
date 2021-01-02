@@ -26,7 +26,7 @@ export const NodeBox = {
 
 export const NodeText = {
   fontSizeHover: '8px',
-  fontSize: '8px',
+  fontSize: '10px',
   color: 'black',
   backgroundColor: 'white',
 };
