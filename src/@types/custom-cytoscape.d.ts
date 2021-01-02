@@ -9,6 +9,8 @@ declare module 'cytoscape' {
     nodeSpacing?: (node: NodeSingular) => number;
     nodeSep?: number;
     idealEdgeLength?: number | ((edge: any) => number);
+    realLayout?: string;
+    compoundLayoutOptions?: BaseLayoutOptions;
   }
 
   namespace Css {

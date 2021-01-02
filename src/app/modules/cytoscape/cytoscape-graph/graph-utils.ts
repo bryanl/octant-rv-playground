@@ -1,3 +1,4 @@
+import { LayoutOptions } from 'cytoscape';
 import * as Cy from 'cytoscape';
 import { DagreGraph } from '../graphs/dagre-graph';
 import * as LayoutDictionary from '../graphs/layout-dictionary';
@@ -26,7 +27,7 @@ export const safeFit = (cy: Cy.Core, centerElements?: Cy.Collection) => {
   cy.emit('fit');
 };
 
-export const runLayout = (cy: Cy.Core, layout: Layout) => {
+export const runLayout = (cy: Cy.Core, layout: LayoutOptions) => {
   const showNodeLabels = cy.scratch(CytoscapeGlobalScratchNamespace).showNodeLabels;
 
   (cy as any).nodeHtmlLabel().updateNodeLabel(cy.nodes());

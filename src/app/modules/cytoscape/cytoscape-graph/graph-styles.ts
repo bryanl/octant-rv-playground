@@ -310,8 +310,6 @@ export class GraphStyles {
       content = data.label;
     }
 
-    console.log(data);
-
     if (ele.hasClass(attr.HighlightClass)) {
       labelRawStyle += 'font-size: ' + attr.NodeText.fontSizeHover + ';';
     }

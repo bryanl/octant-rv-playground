@@ -1,3 +1,7 @@
+import { NullLayoutOptions } from 'cytoscape';
+import { CoseBilkentGraph } from '../graphs/cose-bilkent';
+import { DagreGraph } from '../graphs/dagre-graph';
+
 export enum GraphType {
   RESOURCE_VIEWER = 'resourceViewer',
 }
@@ -25,9 +29,7 @@ export interface CytoscapeClickEvent extends CytoscapeBaseEvent {}
 export interface CytoscapeMouseInEvent extends CytoscapeBaseEvent {}
 export interface CytoscapeMouseOutEvent extends CytoscapeBaseEvent {}
 
-export interface Layout {
-  name: string;
-}
+export type Layout = CoseBilkentGraph | DagreGraph | NullLayoutOptions;
 
 export type SummaryType = 'graph' | 'group' | 'node' | 'edge';
 

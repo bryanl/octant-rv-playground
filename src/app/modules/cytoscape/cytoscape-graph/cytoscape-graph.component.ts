@@ -84,6 +84,7 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
   private tapTarget: any;
   private tapTimeout: any;
   private graphHighlighter?: GraphHighlighter;
+  private isMiniGraph = false;
 
   constructor() {}
 
@@ -347,10 +348,9 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
   }
 
   private selectTarget(target?: Cy.NodeSingular | Cy.EdgeSingular | Cy.Core, isTapped: boolean = false): void {
-    // TODO: make a mini graph
-    // if (this.props.isMiniGraph && isTapped) {
-    //   return;
-    // }
+    if (this.isMiniGraph && isTapped) {
+      return;
+    }
     const cy = this.getCy();
     if (cy) {
       cy.$(':selected').selectify().unselect().unselectify();
