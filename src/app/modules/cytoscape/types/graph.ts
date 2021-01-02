@@ -35,14 +35,11 @@ export type SummaryType = 'graph' | 'group' | 'node' | 'edge';
 
 export interface GraphNodeData {
   id: string;
-  parent?: string;
   isIdle?: boolean;
   isGroup?: string;
   nodeType: string;
-
-  apiVersion: string;
-  kind: string;
   label: string;
+  targets: string[];
 }
 
 export interface GraphEdgeData {

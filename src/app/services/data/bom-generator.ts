@@ -1,11 +1,10 @@
-import { EdgeDefinition, NodeDefinition } from 'cytoscape';
-import { OldGraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
-import { Node } from './node';
+import { EdgeDefinition, ElementsDefinition, NodeDefinition } from 'cytoscape';
+import { GraphNodeData } from '../../modules/cytoscape/types/graph';
 
 export class BOMGenerator {
-  constructor(private nodes: Node[]) {}
+  constructor(private nodes: GraphNodeData[]) {}
 
-  generate(): OldGraphData {
+  generate(): ElementsDefinition {
     return {
       nodes: this.nodeDefinitions(),
       edges: this.edgeDefinitions(),
@@ -14,29 +13,10 @@ export class BOMGenerator {
 
   private nodeDefinitions(): NodeDefinition[] {
     return this.nodes.map(node => {
-      const keywords = [node.group ? `${node.group}-${node.kind}` : node.kind];
-      if (node.keywords) {
-        keywords.push(...node.keywords);
-      }
-
-      const apiVersion = node.group ? `${node.group}/${node.version}` : node.version;
-      const classes = keywords.join(' ');
-      const description = `${apiVersion} ${node.kind}`;
-
       return {
         data: {
-          id: node.id,
-          parent: node.parent,
-          label: node.name,
-          description,
-          apiVersion,
-          nodeType: node.nodeType,
-          kind: node.kind,
-          width: description.length * 6,
-          ...node.extra,
-          isGroup: node.isGroup,
+          ...node,
         },
-        classes,
       };
     });
   }

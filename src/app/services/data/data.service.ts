@@ -1,20 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ElementsDefinition } from 'cytoscape';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { OldGraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
+import { GraphNodeData } from '../../modules/cytoscape/types/graph';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { BOMGenerator } from './bom-generator';
-import { Node } from './node';
 
 interface NodeResponse {
-  nodes: Node[];
+  nodes: GraphNodeData[];
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  private graphDataSubject: BehaviorSubject<OldGraphData> = new BehaviorSubject<OldGraphData>({});
+  private graphDataSubject: BehaviorSubject<ElementsDefinition> = new BehaviorSubject<ElementsDefinition>({
+    nodes: [],
+    edges: [],
+  });
 
   constructor(private http: HttpClient, private webSocketService: WebSocketService) {
     this.webSocketService.registerHandler('nodes', this.handleGraphData.bind(this));
@@ -33,7 +36,7 @@ export class DataService {
     }
   }
 
-  graphData(): Observable<OldGraphData> {
+  graphData(): Observable<ElementsDefinition> {
     return this.graphDataSubject;
   }
 

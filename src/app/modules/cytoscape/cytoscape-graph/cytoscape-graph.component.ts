@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as Cy from 'cytoscape';
-import cytoscape, { Core, EdgeSingular, NodeSingular, Position, SelectionType } from 'cytoscape';
+import cytoscape, { Core, EdgeSingular, LayoutOptions, NodeSingular } from 'cytoscape';
 import { GraphHighlighter } from '../graphs/graph-highlighter';
 import { CyNode } from '../types/cy-node';
 import {
@@ -23,7 +23,6 @@ import {
 import { GraphData } from '../types/graph-data';
 import FocusAnimation from './focus-animation';
 import * as graphUtils from './graph-utils';
-import { GraphConfig } from './graph_config';
 import { WrapperComponent } from './wrapper/wrapper.component';
 
 export interface GraphState {
@@ -43,19 +42,10 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
 
   // TODO remove - old
   @Input()
-  pan: Position;
-
-  // TODO remove - old
-  @Input()
-  selectionType: SelectionType;
-
-  // TODO Remove - old
-  @Input()
-  config: GraphConfig;
-
-  // TODO remove - old
-  @Input()
   zoom = 1;
+
+  @Input()
+  layoutOptions: LayoutOptions;
 
   @Input()
   graphData: GraphData;
@@ -296,7 +286,7 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
     cy.endBatch();
 
     if (updateLayout) {
-      graphUtils.runLayout(cy, this.config.layoutOptions);
+      graphUtils.runLayout(cy, this.layoutOptions);
     }
 
     cy.nodes().unselectify();

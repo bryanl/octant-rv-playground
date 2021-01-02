@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { NodeSingular } from 'cytoscape';
+import { LayoutOptions, NodeSingular } from 'cytoscape';
 import { CytoscapeGraphComponent, GraphState } from '../../modules/cytoscape/cytoscape-graph/cytoscape-graph.component';
-import { GraphConfig } from '../../modules/cytoscape/cytoscape-graph/graph_config';
 import { CytoscapeBaseEvent, CytoscapeClickEvent } from '../../modules/cytoscape/types/graph';
 import { GraphData } from '../../modules/cytoscape/types/graph-data';
 import { ResourceViewerService } from '../../services/resource-viewer/resource-viewer.service';
@@ -22,16 +21,16 @@ export class ResourceViewerComponent implements OnInit {
   @Input()
   graphData: GraphData;
 
-  graphConfig: GraphConfig;
-
   zoom = 1;
 
   state: GraphState = {};
 
+  layoutOptions: LayoutOptions;
+
   constructor(private resourceViewerService: ResourceViewerService) {}
 
   ngOnInit(): void {
-    this.graphConfig = this.resourceViewerService.config();
+    this.layoutOptions = this.resourceViewerService.layoutOptions();
   }
 
   handleGraphState(state: GraphState): void {
