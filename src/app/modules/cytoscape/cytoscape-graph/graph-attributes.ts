@@ -13,8 +13,8 @@ export const Node = {
   colorBorder: Neutral['10'],
   colorBorderDegraded: Warning['800'],
   colorBorderFailure: Danger['800'],
-  height: '25px',
-  width: '25px',
+  height: '45px',
+  width: '45px',
 
   parentBackgroundColor: '#000',
   parentTextColor: '#fff',
@@ -25,7 +25,7 @@ export const NodeBox = {
 };
 
 export const NodeText = {
-  fontSizeHover: '11px',
+  fontSizeHover: '8px',
   fontSize: '8px',
   color: 'black',
   backgroundColor: 'white',

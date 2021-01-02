@@ -8,4 +8,6 @@ export interface Node {
   extra?: { [key: string]: any };
   targets?: string[];
   keywords?: string[];
+  isGroup?: string;
+  nodeType: string;
 }

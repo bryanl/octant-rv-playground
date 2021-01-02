@@ -250,7 +250,7 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
         node.setAttribute('data-node-id', target.id());
       }
 
-      if (target.isParent) {
+      if (target.isParent()) {
         return;
       }
 

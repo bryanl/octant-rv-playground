@@ -1,7 +1,7 @@
 import * as Cy from 'cytoscape';
 import { CytoscapeOptions } from 'cytoscape';
 import { CyNode } from '../types/cy-node';
-import { CytoscapeGlobalScratchData, CytoscapeGlobalScratchNamespace } from '../types/graph';
+import { CytoscapeGlobalScratchData, CytoscapeGlobalScratchNamespace, NodeType } from '../types/graph';
 import * as color from './clarity-colors';
 import { style } from './css-utils';
 import * as attr from './graph-attributes';
@@ -111,8 +111,20 @@ export class GraphStyles {
       }
     };
 
-    const getNodeShape = (_: Cy.NodeSingular): Cy.Css.NodeShape => {
-      return 'ellipse';
+    const getNodeShape = (ele: Cy.NodeSingular): Cy.Css.NodeShape => {
+      const nodeData = decoratedNodeData(ele);
+      switch (nodeData.nodeType) {
+        case NodeType.Workload:
+          return 'ellipse';
+        case NodeType.Networking:
+          return 'triangle';
+        case NodeType.Configuration:
+          return 'barrel';
+        case NodeType.CustomResource:
+          return 'heptagon';
+        default:
+          return 'star';
+      }
     };
 
     const nodeSelectedStyle = {
@@ -298,6 +310,8 @@ export class GraphStyles {
       content = data.label;
     }
 
+    console.log(data);
+
     if (ele.hasClass(attr.HighlightClass)) {
       labelRawStyle += 'font-size: ' + attr.NodeText.fontSizeHover + ';';
     }
@@ -310,7 +324,7 @@ export class GraphStyles {
       labelRawStyle += 'margin-top: 13px;';
     }
 
-    const badges = `<clr-icon shape="success-standard" size='7'></clr-icon>`;
+    const badges = `<cy-badge></cy-badge>`;
     const hasBadge = badges.length > 0;
 
     if (getCyGlobalData(ele).showNodeLabels) {

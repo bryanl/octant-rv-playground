@@ -3,8 +3,10 @@ export enum GraphType {
 }
 
 export enum NodeType {
-  SERVICE = 'service',
-  WORKLOAD = 'workload',
+  Workload = 'workload',
+  Networking = 'networking',
+  Configuration = 'configuration',
+  CustomResource = 'custom-resource',
 }
 
 export const CytoscapeGlobalScratchNamespace = '_global';
@@ -34,6 +36,7 @@ export interface GraphNodeData {
   parent?: string;
   isIdle?: boolean;
   isGroup?: string;
+  nodeType: string;
 
   apiVersion: string;
   kind: string;

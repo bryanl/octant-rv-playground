@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import { OldGraphData } from '../../modules/cytoscape/cytoscape-graph/graph_data';
 import { WebSocketService } from '../web-socket/web-socket.service';
 import { BOMGenerator } from './bom-generator';
@@ -15,18 +14,10 @@ interface NodeResponse {
   providedIn: 'root',
 })
 export class DataService {
-  private graphDataSubject: BehaviorSubject<OldGraphData> = new BehaviorSubject<OldGraphData>(
-    {}
-  );
+  private graphDataSubject: BehaviorSubject<OldGraphData> = new BehaviorSubject<OldGraphData>({});
 
-  constructor(
-    private http: HttpClient,
-    private webSocketService: WebSocketService
-  ) {
-    this.webSocketService.registerHandler(
-      'nodes',
-      this.handleGraphData.bind(this)
-    );
+  constructor(private http: HttpClient, private webSocketService: WebSocketService) {
+    this.webSocketService.registerHandler('nodes', this.handleGraphData.bind(this));
     this.webSocketService.open();
     this.webSocketService.sendMessage('workloads', {
       namespace: 'default',

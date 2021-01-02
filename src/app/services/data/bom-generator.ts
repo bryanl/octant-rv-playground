@@ -19,9 +19,7 @@ export class BOMGenerator {
         keywords.push(...node.keywords);
       }
 
-      const apiVersion = node.group
-        ? `${node.group}/${node.version}`
-        : node.version;
+      const apiVersion = node.group ? `${node.group}/${node.version}` : node.version;
       const classes = keywords.join(' ');
       const description = `${apiVersion} ${node.kind}`;
 
@@ -32,9 +30,11 @@ export class BOMGenerator {
           label: node.name,
           description,
           apiVersion,
+          nodeType: node.nodeType,
           kind: node.kind,
           width: description.length * 6,
           ...node.extra,
+          isGroup: node.isGroup,
         },
         classes,
       };
