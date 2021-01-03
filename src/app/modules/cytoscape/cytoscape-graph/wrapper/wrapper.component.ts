@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import cytoscape, * as Cy from 'cytoscape';
 import cola from 'cytoscape-cola';
 import coseBilkent from 'cytoscape-cose-bilkent';
@@ -27,6 +27,9 @@ export class WrapperComponent implements AfterViewInit, OnDestroy {
   @ViewChild('cyGraph')
   cyGraph: ElementRef;
 
+  @Input()
+  options: Cy.CytoscapeOptions;
+
   cy?: Cy.Core;
 
   constructor() {}
@@ -50,10 +53,15 @@ export class WrapperComponent implements AfterViewInit, OnDestroy {
 
     const options: Cy.CytoscapeOptions = {
       container: this.cyGraph.nativeElement,
-      boxSelectionEnabled: false,
-      style: GraphStyles.styles(),
-      ...GraphStyles.options(),
+      ...(this.options ? this.options : {}),
     };
+
+    // const options: Cy.CytoscapeOptions = {
+    //   container: this.cyGraph.nativeElement,
+    //   boxSelectionEnabled: false,
+    //   style: GraphStyles.styles(),
+    //   ...GraphStyles.options(),
+    // };
 
     this.cy = cytoscape(options);
     (this.cy as any).nodeHtmlLabel(GraphStyles.htmlNodeLabels(this.cy));

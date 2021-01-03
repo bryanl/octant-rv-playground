@@ -325,7 +325,7 @@ export class GraphStyles {
     }
 
     if (isGroup) {
-      labelRawStyle += 'margin-top: 13px;';
+      labelRawStyle += 'margin-top: 15px;';
     }
 
     const badges = `<cy-badge></cy-badge>`;

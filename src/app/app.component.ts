@@ -15,8 +15,9 @@ export class AppComponent implements OnInit, OnDestroy {
   @ViewChild('resourceViewer')
   resourceViewer: ResourceViewerComponent;
 
-  private graphDataSubscription: Subscription;
   graphData: Observable<GraphData>;
+
+  private graphDataSubscription: Subscription;
 
   constructor(private dataService: DataService) {}
 

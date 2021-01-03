@@ -4,12 +4,13 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import * as Cy from 'cytoscape';
-import cytoscape, { Core, EdgeSingular, LayoutOptions, NodeSingular } from 'cytoscape';
+import cytoscape, { Core, CytoscapeOptions, EdgeSingular, LayoutOptions, NodeSingular } from 'cytoscape';
 import { GraphHighlighter } from '../graphs/graph-highlighter';
 import { CyNode } from '../types/cy-node';
 import {
@@ -31,10 +32,10 @@ export interface GraphState {
 
 @Component({
   selector: 'app-cytoscape-graph',
-  template: `<app-wrapper #wrapper></app-wrapper>`,
+  template: `<app-wrapper #wrapper [options]="graphOptions"></app-wrapper>`,
   styleUrls: ['./cytoscape-graph.component.scss'],
 })
-export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
+export class CytoscapeGraphComponent implements OnInit, OnChanges, AfterViewInit {
   static doubleTapMs = 350;
 
   @ViewChild('wrapper')
@@ -46,6 +47,9 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
 
   @Input()
   layoutOptions: LayoutOptions;
+
+  @Input()
+  customGraphOptions: CytoscapeOptions;
 
   @Input()
   graphData: GraphData;
@@ -70,6 +74,10 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
 
   loading = false;
 
+  graphOptions: CytoscapeOptions = {
+    boxSelectionEnabled: false,
+  };
+
   private customViewport: boolean;
   private tapTarget: any;
   private tapTimeout: any;
@@ -77,6 +85,13 @@ export class CytoscapeGraphComponent implements OnChanges, AfterViewInit {
   private isMiniGraph = false;
 
   constructor() {}
+
+  ngOnInit(): void {
+    this.graphOptions = {
+      ...this.graphOptions,
+      ...(this.customGraphOptions ? this.customGraphOptions : {}),
+    };
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const cy = this.getCy();
