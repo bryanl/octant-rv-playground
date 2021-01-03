@@ -102,6 +102,8 @@ export class GraphStyles {
 
     const getNodeBorderColor = (ele: Cy.NodeSingular): string => {
       switch (ele.data(CyNode.healthStatus)) {
+        case health.Healthy.name:
+          return attr.Node.colorBorderHealthy;
         case health.Degraded.name:
           return attr.Node.colorBorderDegraded;
         case health.Failure.name:
@@ -190,6 +192,8 @@ export class GraphStyles {
         style: {
           'background-color': (ele: Cy.NodeSingular) => {
             switch (ele.data(CyNode.healthStatus)) {
+              case health.Healthy.name:
+                return attr.Node.colorFillHoverHealthy;
               case health.Degraded.name:
                 return attr.Node.colorFillHoverDegraded;
               case health.Failure.name:
@@ -200,6 +204,8 @@ export class GraphStyles {
           },
           'border-color': (ele: Cy.NodeSingular) => {
             switch (ele.data(CyNode.healthStatus)) {
+              case health.Healthy.name:
+                return attr.Node.colorFillHoverHealthy;
               case health.Degraded.name:
                 return attr.Node.colorFillHoverDegraded;
               case health.Failure.name:

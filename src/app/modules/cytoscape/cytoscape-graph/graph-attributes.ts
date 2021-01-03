@@ -1,4 +1,4 @@
-import { Danger, Neutral, Warning } from './clarity-colors';
+import { Danger, Neutral, Success, Warning } from './clarity-colors';
 
 export const HighlightClass = 'mousehighlight';
 export const DimClass = 'mousedim';
@@ -8,9 +8,11 @@ export const Node = {
   borderWidth: '1px',
   colorFill: Neutral['5'],
   colorFillHover: Neutral['7'],
+  colorFillHoverHealthy: Success['200'],
   colorFillHoverDegraded: Warning['200'],
   colorFillHoverFailure: Danger['200'],
   colorBorder: Neutral['10'],
+  colorBorderHealthy: Success['200'],
   colorBorderDegraded: Warning['800'],
   colorBorderFailure: Danger['800'],
   height: '45px',
