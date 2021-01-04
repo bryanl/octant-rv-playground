@@ -1,5 +1,5 @@
-import { LayoutOptions } from 'cytoscape';
 import * as Cy from 'cytoscape';
+import { LayoutOptions } from 'cytoscape';
 import { DagreGraph } from '../graphs/dagre-graph';
 import * as LayoutDictionary from '../graphs/layout-dictionary';
 import { CyNode } from '../types/cy-node';
@@ -8,7 +8,6 @@ import {
   CytoscapeGlobalScratchNamespace,
   DecoratedGraphEdgeData,
   DecoratedGraphNodeData,
-  Layout,
 } from '../types/graph';
 import { angleBetweenVectors, normalize, squaredDistance } from '../utils/math';
 

@@ -56,13 +56,6 @@ export class WrapperComponent implements AfterViewInit, OnDestroy {
       ...(this.options ? this.options : {}),
     };
 
-    // const options: Cy.CytoscapeOptions = {
-    //   container: this.cyGraph.nativeElement,
-    //   boxSelectionEnabled: false,
-    //   style: GraphStyles.styles(),
-    //   ...GraphStyles.options(),
-    // };
-
     this.cy = cytoscape(options);
     (this.cy as any).nodeHtmlLabel(GraphStyles.htmlNodeLabels(this.cy));
   }
